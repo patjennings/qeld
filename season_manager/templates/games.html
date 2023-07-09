@@ -5,9 +5,16 @@ Games
 {% endblock %}
 {% block content %}
 {% for game in games %}
-<a class="game" href="game/{{game.id}}">
-    <p class="text-xl">{{game.game_title}}</p>
-    <p class="text-base">{{game.game_date}}</p>
+<a href="game/{{game.id}}" class="game-card p-4 mb-2 rounded-md bg-slate-200 block" >
+    {% if forloop.counter0 == 0 %}
+    <p class="text-2xl">{{game.game_title}}</p>
+    <p class="text-base text-slate-500">{{game.game_date}} - {{game.game_time}}</p>
+    <p class="text-base text-slate-500">{{game.game_place}}</p>
+    {% else %}
+    <span class="text-base">{{game.game_title}}</span>
+    <span class="text-base text-slate-500">{{game.game_date}} - {{game.game_time}}</span>
+    <span class="text-base text-slate-500">{{game.game_place}}</span>
+    {% endif %}
 </a>
 {% endfor %}
 {% endblock %}

@@ -5,7 +5,47 @@ Games
 {% endblock %}
 {% block content %}
 <div class="game" href="#">
-    <p class="text-xl">{{game_title}}</p>
-    <p class="text-base">{{game_date}}</p>
+    <p class="text-3xl pb-1">{{game.game_title}}</p>
+    <p class="text-base text-slate-500">{{game.game_date}}</p>
+</div>
+<div class="poll">
+    <div class="flex flex-wrap">
+        {% for player in players %}
+        <div class="p-3">
+            <div class="meta">{{player.first_name}} {{player.second_name}}</div>
+            <div class="actions flex flex-row">
+                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=present">Présent</a> 
+                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=absent">Absent</a> 
+                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=audience">Spectateur</a> 
+            </div> 
+        </div>
+        {% endfor %}
+    </div>
+    <div class="flex">
+        <div class="bg-slate-200 rounded-md p-4">
+            <div class="title pb-4">Joueurs présents</div>
+            <div class="content">
+                {% for player in poll_present %}
+                <div class="">{{player}}</div> 
+                {% endfor %}
+            </div>
+        </div>
+        <div class="bg-slate-200 rounded-md p-4">
+            <div class="title pb-4">Joueurs absents</div>
+            <div class="content">
+                {% for player in poll_absent %}
+                <div class="">{{player}}</div> 
+                {% endfor %}
+            </div>
+        </div>
+        <div class="bg-slate-200 rounded-md p-4">
+            <div class="title pb-4">Staff</div>
+            <div class="content">
+                {% for player in poll_audience %}
+                <div class="">{{player}}</div> 
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
