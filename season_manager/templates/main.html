@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <script src="{% static 'js/scripts.js' %}"></script>
+    </head>
+    <body>
+        <div class="p-4 bg-gray-100 dark:bg-gray-900">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
