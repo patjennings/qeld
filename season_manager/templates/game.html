@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}
+Games
+{% endblock %}
+{% block content %}
+<div class="game" href="#">
+    <p class="text-xl">{{game_title}}</p>
+    <p class="text-base">{{game_date}}</p>
+</div>
+{% endblock %}

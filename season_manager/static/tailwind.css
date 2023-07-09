@@ -1,0 +1,85 @@
+/*!
+Theme Name: Kernavélo 2023
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body{
+        @apply bg-gray-100 text-gray-900;
+    }
+    a{
+        @apply text-blue-600 dark:text-blue-200 transition-all delay-75;
+        &:hover{
+            @apply text-blue-400;
+        }
+    }
+    .button{
+        @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded px-3 py-1 cursor-pointer;
+        &:hover{
+            @apply bg-blue-600 text-white;
+            
+}
+        &.submit{
+            @apply bg-blue-600 text-white cursor-pointer;
+        }
+    }
+    .images-container{
+        .image-thumbnail{
+            a{
+                @apply transition-all delay-75;
+                img{
+                    @apply transition-all delay-75;
+                }
+                &:hover{
+                    @apply bg-gray-200;
+                    img{
+                        @apply opacity-75;
+                    }
+                }
+            }
+        }
+        &.size-sm{
+            .image-thumbnail a{
+                @apply w-16;
+                img{
+                    @apply w-16 h-16;
+                }
+            }
+        }
+        &.size-md{
+            .image-thumbnail a{
+                @apply w-44;
+                img{
+                    @apply w-44 h-44;
+                }
+            }
+        }
+        &.size-lg{
+            .image-thumbnail a{
+                @apply w-80;
+                img{
+                    @apply w-80 h-80;
+                }
+            }
+        }
+    }
+
+    .tag{
+        @apply rounded-full text-xs bg-gray-200 text-gray-500 px-3 py-1 inline-block;
+
+        &:hover{
+            @apply bg-gray-500 text-gray-100;
+        }
+        &.edit{
+            @apply bg-gray-100 text-blue-600;
+            &:hover{
+                @apply bg-blue-600 text-white;
+            }
+        }
+    }
+}
+@layer utilities{
+}
