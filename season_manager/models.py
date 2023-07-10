@@ -14,6 +14,8 @@ class Game(models.Model):
     game_score = models.CharField(max_length=255)
     goals_for = models.IntegerField()
     goals_against = models.IntegerField()
+    game_goals = models.JSONField(default=[])
+    game_assists = models.JSONField(default=[])
     game_status = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     game_place = models.CharField(max_length=255,default='None')

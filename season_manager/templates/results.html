@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}
+Games
+{% endblock %}
+{% block content %}
+<div class="table">
+    <div class="table-header-group">
+        <div class="table-row">
+            <div class="table-cell text-left p-3">Date</div>
+            <div class="table-cell text-left p-3">Match</div>
+            <div class="table-cell text-left p-3">Score</div>
+            <div class="table-cell text-left p-3">Compétition</div>
+        </div>
+    </div>
+    {% for game in games %}
+    <div class="table-row-group">
+        <a class="table-row" href="http://{{request.get_host}}/game/{{game.id}}">
+            <div class="table-cell text-left p-3">{{game.game_date}}</div>
+            <div class="table-cell text-left p-3">{{game.game_title}}</div>
+            <div class="table-cell text-left p-3">{{game.game_score}}</div>
+            <div class="table-cell text-left p-3">{{game.type}}</div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

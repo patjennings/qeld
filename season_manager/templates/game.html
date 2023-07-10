@@ -4,48 +4,79 @@
 Games
 {% endblock %}
 {% block content %}
-<div class="game" href="#">
+<div class="game mb-4" href="#">
     <p class="text-3xl pb-1">{{game.game_title}}</p>
     <p class="text-base text-slate-500">{{game.game_date}}</p>
+    <p class="text-base">{{game.game_score}}</p>
+</div>
+<div class="stats flex flex-row">
+    <div class="flex flex-col mb-4 p-6 bg-slate-50 rounded-md">
+    <div class="font-bold">Buteurs</div>
+    <div class="flex flex-col">
+        {% for striker in game.game_goals %}
+        {% for i, player in players_list.items %}
+        {% if i == striker %}
+        <div>{{player}}</div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<div class="flex flex-col mb-4 p-6 bg-slate-50 rounded-md">
+    <div class="font-bold">Passeurs</div>
+    <div class="flex flex-col">
+        {% for assist in game.game_assists %}
+        {% for i, player in players_list.items %}
+        {% if i == assist %}
+        <div>{{player}}</div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
 </div>
 <div class="poll">
     <div class="flex flex-wrap">
-        {% for player in players %}
-        <div class="p-3">
-            <div class="meta">{{player.first_name}} {{player.second_name}}</div>
-            <div class="actions flex flex-row">
-                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=present">Présent</a> 
-                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=absent">Absent</a> 
-                <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{player.id}}&poll={{game.poll_id}}&game={{game.id}}&status=audience">Spectateur</a> 
-            </div> 
+        {% for id, player in players_list.items %}
+        {% if id in players_poll_done %}
+        <div class="player p-3 bg-green-100 border border-green-300">
+            {% else %}
+            <div class="player p-3 bg-slate-100">
+                {% endif %}
+                <div class="meta">{{player}} </div>
+                <div class="actions flex flex-row">
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=present">Présent</a> 
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=absent">Absent</a> 
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=audience">Staff</a> 
+                </div> 
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div class="flex">
+            <div class="bg-slate-200 rounded-md p-4">
+                <div class="title pb-4">Joueurs présents</div>
+                <div class="content">
+                    {% for id, player in poll_present.items %}
+                    <div class="">{{player}}</div> 
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="bg-slate-200 rounded-md p-4">
+                <div class="title pb-4">Joueurs absents</div>
+                <div class="content">
+                    {% for id, player in poll_absent.items %}
+                    <div class="">{{player}}</div> 
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="bg-slate-200 rounded-md p-4">
+                <div class="title pb-4">Staff</div>
+                <div class="content">
+                    {% for id, player in poll_audience.items %}
+                    <div class="">{{player}}</div> 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="flex">
-        <div class="bg-slate-200 rounded-md p-4">
-            <div class="title pb-4">Joueurs présents</div>
-            <div class="content">
-                {% for player in poll_present %}
-                <div class="">{{player}}</div> 
-                {% endfor %}
-            </div>
-        </div>
-        <div class="bg-slate-200 rounded-md p-4">
-            <div class="title pb-4">Joueurs absents</div>
-            <div class="content">
-                {% for player in poll_absent %}
-                <div class="">{{player}}</div> 
-                {% endfor %}
-            </div>
-        </div>
-        <div class="bg-slate-200 rounded-md p-4">
-            <div class="title pb-4">Staff</div>
-            <div class="content">
-                {% for player in poll_audience %}
-                <div class="">{{player}}</div> 
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}

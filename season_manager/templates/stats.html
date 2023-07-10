@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}
+Games
+{% endblock %}
+{% block content %}
+<div class="text-md">Buteurs</div>
+<div class="table">
+    <div class="table-header-group">
+        <div class="table-row">
+            <div class="table-cell text-left p-3">Joueur</div>
+            <div class="table-cell text-left p-3">Buts</div>
+        </div>
+    </div>
+    {% for id, striker in strikers.items %}
+    <div class="table-row-group">
+        <a class="table-row" href="http://{{request.get_host}}/game/{{game.id}}">
+            <div class="table-cell text-left p-3">
+
+                {% for player in players %}
+                {% if id == player.id %}
+                {{player.first_name}} {{player.second_name}}
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="table-cell text-left p-3">{{striker.goals}}</div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+<div class="text-md">Passeurs</div>
+<div class="table">
+    <div class="table-header-group">
+        <div class="table-row">
+            <div class="table-cell text-left p-3">Joueur</div>
+            <div class="table-cell text-left p-3">Passes décisives</div>
+        </div>
+    </div>
+    {% for id, passer in passers.items %}
+    <div class="table-row-group">
+        <a class="table-row" href="http://{{request.get_host}}/game/{{game.id}}">
+            <div class="table-cell text-left p-3">
+
+                {% for player in players %}
+                {% if id == player.id %}
+                {{player.first_name}} {{player.second_name}}
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="table-cell text-left p-3">{{passer.assists}}</div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
