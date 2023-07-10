@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import Game,Poll,Player
-from datetime import datetime
+# from datetime import datetime, date, time
+import datetime
 from var_dump import var_dump
 
 __season = '2023-2024'
@@ -16,34 +17,22 @@ def games(request):
     present_for_game = {}
     absent_for_game = {}
 
-    current_date = datetime.now()
-
+    current_date = datetime.datetime.now()
 
     for game in games:
-        # print(game['game_season'], __season)
         if game['game_season'] == __season:
             games_list.append(game)
 
-    # print(games_list)
-    print(games_list)
-    # for i,d in games_list.items():
-        # print(d['game_date'])
-
     sorted_games_list = sorted(games_list, key=lambda item:item['game_date'])
 
-
+    # comparer maintenant avec le match, et retirer ce qui est passé
     for g in sorted_games_list:
-        print(current_date, datetime.date(g['game_date']))
-        # if g['game_date'] < datetime.date.now():
-            # sorted_games_list.remove(g)
-    # sorted_game_list_dict = {}
-    # for key,value in sorted_game_list:
-        # sorted_game_list_dict[key] = value
+        match_date = g['game_date']
+        match_time = datetime.time(10, 30)
+        match_datetime = datetime.datetime.combine(match_date, match_time)
+        if current_date > match_datetime:
+            sorted_games_list.remove(g)
 
-    # sorted_strikers = sorted(strikers.items(), key=lambda item: item[1]['goals'], reverse=True)
-    # sorted_strikers_dict = {}
-    # for key,value in sorted_strikers:
-        # sorted_strikers_dict[key] = value
 
     for game in games:
         poll = Poll.objects.get(id=game['game_poll_id'])
@@ -194,9 +183,16 @@ def poll_answer(request, id):
 def results(request):
     games = Game.objects.all().values()
 
+    games_list = []
+
+    for game in games:
+        games_list.append(game)
+
+    sorted_games_list = sorted(games_list, key=lambda item:item['game_date'])
+
     template = loader.get_template('results.html')
     context = {
-        'games': games,
+        'games': sorted_games_list,
     }
 
     return HttpResponse(template.render(context, request))
