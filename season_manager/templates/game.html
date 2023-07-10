@@ -45,10 +45,32 @@ Games
                 {% endif %}
                 <div class="meta">{{player}} </div>
                 <div class="actions flex flex-row">
-                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=present">Présent</a> 
-                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=absent">Absent</a> 
-                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.poll_id}}?player={{id}}&poll={{game.poll_id}}&game={{game.id}}&status=audience">Staff</a> 
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=present">Présent</a> 
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=absent">Absent</a> 
+                    <a class="button" href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=audience">Staff</a> 
                 </div> 
+                <div class="actions_stat flex flex-col">
+                    <div class="">
+                        <p class="">But</p>
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=add">+</a> 
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=remove">-</a> 
+                    </div>
+                    <div class="">
+                        <p class="">Passe décisive</p>
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=add">+</a> 
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=remove">-</a> 
+                    </div>
+                    <div class="">
+                        <div class="">
+                            <p class="">Carton rouge</p>
+                            <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=add">+</a> 
+                            <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=remove">-</a> 
+                        </div>
+                        <p class="">Carton jaune</p>
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=add">+</a> 
+                        <a class="button" href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=remove">-</a> 
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>

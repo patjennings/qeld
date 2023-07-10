@@ -11,6 +11,7 @@ Games
             <div class="table-cell text-left p-3">Match</div>
             <div class="table-cell text-left p-3">Score</div>
             <div class="table-cell text-left p-3">Compétition</div>
+            <div class="table-cell text-left p-3">Saison</div>
         </div>
     </div>
     {% for game in games %}
@@ -19,7 +20,8 @@ Games
             <div class="table-cell text-left p-3">{{game.game_date}}</div>
             <div class="table-cell text-left p-3">{{game.game_title}}</div>
             <div class="table-cell text-left p-3">{{game.game_score}}</div>
-            <div class="table-cell text-left p-3">{{game.type}}</div>
+            <div class="table-cell text-left p-3">{{game.game_type}}</div>
+            <div class="table-cell text-left p-3">{{game.game_season}}</div>
         </a>
     </div>
     {% endfor %}
