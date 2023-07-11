@@ -56,4 +56,27 @@ Games
     {% endif %}
     {% endfor %}
 </div>
+<div class="stats flex flex-row">
+    <div class="stat flex flex-col">
+        <p class="text-sm">Totals de buts inscrits</p>
+        <p class="text-xl">{{total_competition_goals_for}}</p>
+    </div>
+    <div class="stat flex flex-col">
+        <p class="text-sm">Totals de buts encaissés</p>
+        <p class="text-xl">{{total_competition_goals_against}}</p>
+    </div>
+    <div class="stat flex flex-col">
+        <p class="text-sm">Totals de matchs joués</p>
+        <p class="text-xl">{{total_competition_games}}</p>
+    </div>
+
+    <div class="stat flex flex-col">
+        <p class="text-sm">Moyenne de buts marqués</p>
+        <p class="text-xl">{{ratio_competition_for}}</p>
+    </div>
+    <div class="stat flex flex-col">
+        <p class="text-sm">Moyenne de buts encaissés</p>
+        <p class="text-xl">{{ratio_competition_against}}</p>
+    </div>
+</div>
 {% endblock %}

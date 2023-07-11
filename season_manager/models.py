@@ -6,6 +6,7 @@ class Poll(models.Model):
     present = models.JSONField(default=[])
     absent = models.JSONField(default=[])
     audience = models.JSONField(default=[])
+    poll_season = models.CharField(max_length=255,default='')
 
 class Game(models.Model):
     game_title = models.CharField(max_length=255)

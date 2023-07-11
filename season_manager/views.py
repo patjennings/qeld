@@ -182,11 +182,18 @@ def poll_answer(request, id):
 
 def results(request):
     games = Game.objects.all().values()
+    display_season = request.GET.get('display_season')
+
+    # check la saison affichée
+    current_season = __season
+    if display_season != None:
+        current_season = display_season
 
     games_list = []
 
     for game in games:
-        games_list.append(game)
+        if game['game_season'] == current_season:
+            games_list.append(game)
 
     sorted_games_list = sorted(games_list, key=lambda item:item['game_date'])
 
@@ -202,24 +209,89 @@ def stats(request):
     players = Player.objects.all().values()
     polls = Poll.objects.all().values()
 
+    # check la saison affichée
+    display_season = request.GET.get('display_season')
+    current_season = __season
+    if display_season != None:
+        current_season = display_season
+
     strikers = {}
     passers = {}
+
+    games_amical = []
+    games_championnat = []
+    games_coupe = []
+
+    games_amical_total = 0
+    games_championnat_total = 0
+    games_coupe_total = 0
+
+    amical_goals_for = 0
+    amical_goals_against = 0
+    championnat_goals_for = 0
+    championnat_goals_against = 0
+    coupe_goals_for = 0
+    coupe_goals_against = 0
+    total_competition_goals_for = 0
+    total_all_goals_for = 0
+    total_competition_goals_against = 0
+    total_all_goals_against = 0
+    total_competition_games = 0
+    total_all_games = 0
+    ratio_all_for = 0
+    ratio_competition_for = 0
+    ratio_all_against = 0
+    ratio_competition_against = 0
 
     for player in players:
         strikers[player['id']] = {'presence': 0, 'goals': 0}
         passers[player['id']] = {'presence': 0, 'assists': 0}
 
     for game in games:
-        for goals in game['game_goals']:
-            strikers[goals]['goals'] += 1
-        for assists in game['game_assists']:
-            passers[assists]['assists'] += 1
+        if game['game_season'] == current_season:
+            for goals in game['game_goals']:
+                strikers[goals]['goals'] += 1
+            for assists in game['game_assists']:
+                passers[assists]['assists'] += 1
+            if game['game_type'] == 'championnat':
+                games_championnat.append(game)
+            if game['game_type'] == 'coupe':
+                games_coupe.append(game)
+            if game['game_type'] == 'amical':
+                games_amical.append(game)
+
+    for game in games_amical:
+        amical_goals_for += game['goals_for']
+        amical_goals_against += game['goals_against']
+        games_amical_total += 1
+    for game in games_championnat:
+        championnat_goals_for += game['goals_for']
+        championnat_goals_against += game['goals_against']
+        games_championnat_total += 1
+    for game in games_coupe:
+        coupe_goals_for += game['goals_for']
+        coupe_goals_against += game['goals_against']
+        games_coupe_total += 1
 
     for poll in polls:
-        for present in poll['present']:
-            strikers[present]['presence'] +=1
-            passers[present]['presence'] +=1
-    
+        if poll['poll_season'] == current_season:
+            for present in poll['present']:
+                strikers[present]['presence'] +=1
+                passers[present]['presence'] +=1
+
+    total_competition_goals_for = championnat_goals_for + coupe_goals_for
+    total_all_goals_for = amical_goals_for + championnat_goals_for + coupe_goals_for
+    total_competition_goals_against = championnat_goals_against + coupe_goals_against
+    total_all_goals_against = amical_goals_against + championnat_goals_against + coupe_goals_against
+    total_competition_games = games_championnat_total + games_coupe_total
+    total_all_games = games_amical_total + games_championnat_total + games_coupe_total
+    if total_all_games > 0:
+        ratio_all_for = "{:.2f}".format(total_all_goals_for/total_all_games)
+        ratio_all_against = "{:.2f}".format(total_all_goals_against/total_all_games)
+    if total_competition_games > 0:
+        ratio_competition_for = "{:.2f}".format(total_competition_goals_for/total_competition_games)
+        ratio_competition_against = "{:.2f}".format(total_competition_goals_against/total_competition_games)
+
     sorted_strikers = sorted(strikers.items(), key=lambda item: item[1]['goals'], reverse=True)
     sorted_strikers_dict = {}
     for key,value in sorted_strikers:
@@ -230,13 +302,30 @@ def stats(request):
     for key,value in sorted_passers:
         sorted_passers_dict[key] = value
 
-    print(strikers) 
-
     template = loader.get_template('stats.html')
     context = {
         'players': players,
         'strikers': sorted_strikers_dict,
-        'passers': sorted_passers_dict
+        'passers': sorted_passers_dict,
+        'games_amical_total': games_amical_total,
+        'games_championnat_total': games_championnat_total,
+        'games_coupe_total': games_coupe_total,
+        'amical_goals_for': amical_goals_for,
+        'amical_goals_against': amical_goals_against,
+        'championnat_goals_for': championnat_goals_for,
+        'championnat_goals_against': championnat_goals_against,
+        'coupe_goals_for': coupe_goals_for,
+        'coupe_goals_against': coupe_goals_against,
+    'total_competition_goals_for': total_competition_goals_for,
+    'total_all_goals_for': total_all_goals_for,
+    'total_competition_goals_against': total_competition_goals_against,
+    'total_all_goals_against': total_all_goals_against,
+    'total_competition_games': total_competition_games,
+    'total_all_games': total_all_games,
+    'ratio_all_for': ratio_all_for,
+    'ratio_competition_for': ratio_competition_for,
+    'ratio_all_against': ratio_all_against,
+    'ratio_competition_against': ratio_competition_against,
     }
 
     return HttpResponse(template.render(context, request))
