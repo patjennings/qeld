@@ -7,16 +7,29 @@
         <script src="{% static 'js/scripts.js' %}"></script>
     </head>
     <body>
-        <div class="container mx-auto pt-4">
-            <div class="menu mb-4">
-                <ul class="flex flex-row">
-                    <li><a href="http://{{request.get_host}}/games" class="px-2">Matchs à venir</a></li>
-                    <li><a href="http://{{request.get_host}}/results" class="px-2">Résultats</a></li>
-                    <li><a href="http://{{request.get_host}}/stats" class="px-2">Stats</a></li>
+        <div class="w-screen flex flex-row bg-slate-100">
+            <!-- dekstop menu -->
+            <div class="menu mb-4 bg-slate-900 hidden tablet:block w-16 h-screen fixed top-0 left-0">
+                <ul class="flex flex-col">
+                    <li><a href="http://{{request.get_host}}/games" class="p-4 block"><img src="{% static 'assets/icons/calendar_month.svg' %}"/></a></li>
+                    <li><a href="http://{{request.get_host}}/results" class="p-4 block"><img src="{% static 'assets/icons/emoji_events.svg' %}"/></a></li>
+                    <li><a href="http://{{request.get_host}}/stats" class="p-4 block"><img src="{% static 'assets/icons/bar_chart.svg' %}"/></a></li>
                 </ul>
             </div>
-            {% block content %}
-            {% endblock %}
+            <!-- mobile menu -->
+            <div class="menu bg-white block tablet:hidden h-fit w-screen fixed bottom-0 border-t border-gray-200">
+                <ul class="flex flex-row items-center w-fit mx-auto">
+                    <li><a href="http://{{request.get_host}}/games" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/calendar_month_dark.svg' %}" class="mb-1" />Matchs à venir</a></li>
+                    <li><a href="http://{{request.get_host}}/results" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/emoji_events_dark.svg' %}"/>Résultats</a></li>
+                    <li><a href="http://{{request.get_host}}/stats" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/bar_chart_dark.svg' %}"/>Statistiques</a></li>
+                </ul>
+            </div>
+            <div class="pl-0 tablet:pl-16 w-screen">
+                <div class="container py-8 px-2 mx-auto">
+                {% block content %}
+                {% endblock %}
+                </div>
+            </div>
         </div>
     </body>
 </html>

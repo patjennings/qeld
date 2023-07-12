@@ -16,6 +16,59 @@ Theme Name: Kernavélo 2023
         /* @apply text-blue-400; */
         /* } */
     }
+    .tag{
+        @apply pl-3 pr-3 py-1 rounded-full text-white text-sm w-fit h-fit bg-blue-600;
+        &.present{
+            @apply bg-green-600;
+        }
+        &.absent{
+            @apply bg-red-600;
+        }
+        &.light{
+            &.present{
+                @apply bg-green-100 text-green-600;
+            }
+            &.absent{
+                @apply bg-green-100 text-red-600;
+            }
+        }
+    }
+    .card{
+        @apply p-4 bg-white rounded-md border-t-4 border-red-600;
+}
+    .player{
+        &.answer-none{
+            @apply bg-white;
+        }
+        &.answer-ok{
+            @apply bg-lime-50;
+        }
+        .actions{
+            .action--answer{
+                @apply rounded-full flex items-center justify-center w-10 h-10 mr-1;
+                &.present{
+                    @apply bg-green-100;
+                    &.hover{
+                        @apply bg-green-700;
+                    }
+                }
+                &.absent{
+                    @apply bg-red-100;
+                    &.hover{
+                        @apply bg-red-700;
+                    }
+
+                }
+                &.staff{
+                    @apply bg-cyan-100;
+                    &.hover{
+                        @apply bg-cyan-700;
+                    }
+
+                }
+            }
+        }
+    }
     .game-card{
         @apply transition-all delay-75;
         &:hover{

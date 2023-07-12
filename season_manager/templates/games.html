@@ -1,42 +1,62 @@
 {% extends "main.html" %}
 {% load static %}
 {% block title %}
-Games
+Matchs à venir
 {% endblock %}
 {% block content %}
+<div class="text-xl">Matchs à venir</div>
 {% for game in games %}
-<a href="http://{{request.get_host}}/game/{{game.id}}" class="game-card p-4 mb-2 rounded-md bg-slate-200 block" >
-    {% if forloop.counter0 == 0 %}
-    <!-- Prochain match -->
-    <p class="text-2xl">{{game.game_title}}</p>
-    <p class="text-base text-slate-500">{{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
-    <p class="text-base text-slate-500">{{game.game_place}}</p>
-    {% for i,q in present_for_game.items %}
-    {% if i == game.id %}
-    <span>{{q}} présents</span>
-    {% endif %}
-    {% endfor %}
-    {% for i,q in absent_for_game.items %}
-    {% if i == game.id %}
-    <span>{{q}} absents</span>
-    {% endif %}
-    {% endfor %}
+{% if forloop.counter0 == 0 %}
+<!-- Prochain match -->
+<div class="rounded-full bg-blue-700 text-white pl-2 pr-4 py-1 flex flex-row w-fit relative -left-4 top-4 top-0"><img src="{% static 'assets/icons/arrow_forward.svg' %}" class="mr-1" />Prochain match</div>
+<a href="http://{{request.get_host}}/game/{{game.id}}" class="game-card pt-7 pb-4 px-4 mb-2 rounded-md bg-slate-800 text-white block flex flex-col laptop:flex-row">
+    <div class="infos w-3/4 mb-2 laptop:mb-0">
+        <p class="text-base text-slate-400">{{game.game_type}}</p>
+        <p class="text-2xl mb-2">{{game.game_title}}</p>
+        <div class="datetime flex flex-row text-slate-500">
+            <p class="text-base mr-2 flex flex-row text-slate-400"><img src="{% static 'assets/icons/clock.svg' %}" class="mr-1 h-6 w-6" /> {{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
+            <p class="text-base flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="ml-4 mr-1 h-6 w-6" />{{game.game_place}}</p>
+        </div>
+    </div>
+    <div class="poll w-1/4 flex flex-row items-center">
+        {% for i,q in present_for_game.items %}
+        {% if i == game.id %}
+        <div class="tag present mr-1">{{q}}&nbsp;présents</div>
+        {% endif %}
+        {% endfor %}
+        {% for i,q in absent_for_game.items %}
+        {% if i == game.id %}
+        <div class="tag absent">{{q}}&nbsp;absents</div>
+        {% endif %}
+        {% endfor %}
+    
+    </div>
+
+   </a>
     {% else %}
-    <!-- matchs suivants -->
-    <span class="text-base">{{game.game_title}}</span>
-    <span class="text-sm text-slate-500">{{game.game_date|date:"l d F Y"}} - {{game.game_time}}</span>
-    <span class="text-sm text-slate-500">{{game.game_place}}</span>
+<!-- matchs suivants -->
+   <a href="http://{{request.get_host}}/game/{{game.id}}" class="game-card p-4 mb-2 rounded-md bg-white text-slate-900 block flex flex-col laptop:flex-row">
+    
+    <div class="infos w-3/4 mb-2 laptop:mb-0">
+        <div class="text-base">{{game.game_title}}<span class="text-base text-slate-400 ml-2">{{game.game_type}}</span></div>
+        <div class="datetime flex flex-row text-slate-500 items-center">
+            <p class="text-sm mr-2 flex flex-row items-center text-slate-400"><img src="{% static 'assets/icons/clock.svg' %}" class="mr-1 h-4 w-4" /> {{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
+            <p class="text-sm flex flex-row items-center text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="ml-4 mr-1 h-5 w-4" />{{game.game_place}}</p>
+        </div>
+    </div>
+    <div class="poll w-1/4 flex flex-row items-center">
     {% for i,q in present_for_game.items %}
     {% if i == game.id %}
-    <span>{{q}} présents</span>
+    <div class="tag present light mr-1">{{q}}&nbsp;présents</div>
     {% endif %}
     {% endfor %}
     {% for i,q in absent_for_game.items %}
     {% if i == game.id %}
-    <span>{{q}} absents</span>
+    <div class="tag absent light">{{q}}&nbsp;absents</div>
     {% endif %}
     {% endfor %}
-    {% endif %}
+    </div>
 </a>
+    {% endif %}
 {% endfor %}
 {% endblock %}

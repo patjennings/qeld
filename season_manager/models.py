@@ -10,6 +10,8 @@ class Poll(models.Model):
 
 class Game(models.Model):
     game_title = models.CharField(max_length=255)
+    game_team_home = models.CharField(max_length=255, default='')
+    game_team_away = models.CharField(max_length=255, default='')
     game_date = models.DateField(default=date.today)
     game_time = models.CharField(max_length=255, default='10:00')
     game_score = models.CharField(max_length=255, default='0-0')
