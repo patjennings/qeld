@@ -13,7 +13,7 @@ Games
     <div class="flex flex-col mb-4 p-6 bg-slate-50 rounded-md">
     <div class="font-bold">Buteurs</div>
     <div class="flex flex-col">
-        {% for striker in game.game_goals %}
+        {% for striker in game_goals %}
         {% for i, player in players_list.items %}
         {% if i == striker %}
         <div>{{player}}</div>
@@ -25,7 +25,7 @@ Games
 <div class="flex flex-col mb-4 p-6 bg-slate-50 rounded-md">
     <div class="font-bold">Passeurs</div>
     <div class="flex flex-col">
-        {% for assist in game.game_assists %}
+        {% for assist in game_assists %}
         {% for i, player in players_list.items %}
         {% if i == assist %}
         <div>{{player}}</div>

@@ -5,6 +5,7 @@ from .models import Game,Poll,Player
 # from datetime import datetime, date, time
 import datetime
 from var_dump import var_dump
+from ast import literal_eval
 
 __season = '2023-2024'
 
@@ -36,8 +37,8 @@ def games(request):
 
     for game in games:
         poll = Poll.objects.get(id=game['game_poll_id'])
-        present_for_game[game['id']] = len(poll.present)
-        absent_for_game[game['id']] = len(poll.absent)
+        present_for_game[game['id']] = len(get_list_from_str(poll.present))
+        absent_for_game[game['id']] = len(get_list_from_str(poll.absent))
 
     template = loader.get_template('games.html')
     context = {
@@ -53,6 +54,11 @@ def game(request, id):
     players = Player.objects.all().values()
     poll = Poll.objects.get(id=game.game_poll_id)
 
+    # on commence par transformer les strings de la base en vraies listes
+    poll_present_list = get_list_from_str(poll.present)
+    poll_absent_list = get_list_from_str(poll.absent)
+    poll_audience_list = get_list_from_str(poll.audience)
+
     poll_present = {}
     poll_absent = {}
     poll_audience = {}
@@ -64,11 +70,11 @@ def game(request, id):
         if p['status'] is True:
             players_list[p['id']] = get_player_name(p['id'])
 
-    for pr in poll.present:
+    for pr in poll_present_list:
         poll_present[pr] = get_player_name(pr)
-    for ab in poll.absent:
+    for ab in poll_absent_list:
         poll_absent[ab] = get_player_name(ab)
-    for au in poll.audience:
+    for au in poll_audience_list:
         poll_audience[au] = get_player_name(au)
 
     for i,p in poll_present.items():
@@ -82,8 +88,13 @@ def game(request, id):
             players_poll_done.append(i)
 
     template = loader.get_template('game.html')
+
     context = {
         'game': game,
+        'game_goals': get_list_from_str(game.game_goals),
+        'game_assists': get_list_from_str(game.game_assists),
+        'game_yellowcards': get_list_from_str(game.game_yellowcards),
+        'game_redcards': get_list_from_str(game.game_redcards),
         'players_list': players_list,
         'poll_present': poll_present,
         'poll_absent': poll_absent,
@@ -102,35 +113,29 @@ def update_game_stats(request, id):
     player_name = get_player_name(int(player_id))
     game = Game.objects.get(id=game_id)
 
-    def add_stat(s, p):
-        game_stat = getattr(game, s)
-        game_stat.append(p)
-        game.save()
-    def remove_stat(s, p):
-        game_stat = getattr(game, s)
-        # i=len(game_stat)
-        # while i > 0:
-            # if i is p:
-                # del game_stat[i]
-                # print(game_stat[i])
-                # game.save()
-                # break
-            # i-=1
+    def add_stat(l, p):
+        l.append(p)
+        return l
 
-        for i in game_stat:
-            # print(i)
+    def remove_stat(l, p):
+        for i in l:
             if i is p:
-                game_stat.remove(p)
-                game.save()
-                break
-                # print('remove')
-            # else:
-                # print('nope')
+                l.remove(p)
+                return l
+                break # on break dès qu'on trouve, car on ne 
 
     if method == 'add':
-        add_stat(field, int(player_id))
+        game_stat = getattr(game, field) # getattr permet de pointer un champ dans la table, passé par une variable, et de récupérer la donnée
+        game_stat_list = get_list_from_str(game_stat)
+        game_stat_update = add_stat(game_stat_list, int(player_id))
+        game_stat = setattr(game, field, game_stat_update)# setattr permet de pointer un champ dans la table, passé par une variable, et de remplacer la donnée
+        game.save()
     elif method == 'remove':
-        remove_stat(field, int(player_id))
+        game_stat = getattr(game, field)
+        game_stat_list = get_list_from_str(game_stat)
+        game_stat_update = remove_stat(game_stat_list, int(player_id))
+        game_stat = setattr(game, field, game_stat_update)
+        game.save()
 
     return HttpResponseRedirect("/game/"+str(game_id))
 
@@ -144,40 +149,43 @@ def poll_answer(request, id):
     player = Player.objects.get(id=player_id)
     poll = Poll.objects.get(id=game_poll_id)
 
-    poll_present = poll.present
-    poll_absent = poll.absent
-    poll_audience = poll.audience
+    poll_present = get_list_from_str(poll.present)
+    poll_absent = get_list_from_str(poll.absent)
+    poll_audience = get_list_from_str(poll.audience)
 
-
-    def remove_from_list(id, record, li):
+    def remove_from_list(id, li):
         if int(id) in li:
             li.remove(int(id))
-            record = li
-            poll.save()
+            return li
+        else:
+            return li
 
-    def add_to_list(id, record, li):
+    def add_to_list(id, li):
         if int(id) not in li:
             li.append(int(id))
-            record = li
-            poll.save()
+            return li
+        else:
+            return li
 
     if answer_status == 'present':
-        remove_from_list(player_id, poll.absent, poll_absent)
-        remove_from_list(player_id, poll.audience, poll_audience)
-        add_to_list(player_id, poll.present, poll_present)
+        poll.present = str(add_to_list(player_id, poll_present))
+        poll.absent = str(remove_from_list(player_id, poll_absent))
+        poll.audience = str(remove_from_list(player_id, poll_audience))
+        poll.save()
     elif answer_status == 'absent':
-        remove_from_list(player_id, poll.present, poll_present)
-        remove_from_list(player_id, poll.audience, poll_audience)
-        add_to_list(player_id, poll.absent, poll_absent)
+        poll.absent = str(add_to_list(player_id, poll_absent))
+        poll.present = str(remove_from_list(player_id, poll_present))
+        poll.audience = str(remove_from_list(player_id, poll_audience))
+        poll.save()
     elif answer_status == 'audience':
-        remove_from_list(player_id, poll.absent, poll_absent)
-        remove_from_list(player_id, poll.present, poll_present)
-        add_to_list(player_id, poll.audience, poll_audience)
+        poll.audience = str(add_to_list(player_id, poll_audience))
+        poll.present = str(remove_from_list(player_id, poll_present))
+        poll.absent = str(remove_from_list(player_id, poll_absent))
+        poll.save()
     else:
         print('erreur')
 
     return HttpResponseRedirect("/game/"+str(game_id))
-    # if this is a POST request we need to process the form data
 
 
 def results(request):
@@ -249,9 +257,9 @@ def stats(request):
 
     for game in games:
         if game['game_season'] == current_season:
-            for goals in game['game_goals']:
+            for goals in get_list_from_str(game['game_goals']):
                 strikers[goals]['goals'] += 1
-            for assists in game['game_assists']:
+            for assists in get_list_from_str(game['game_assists']):
                 passers[assists]['assists'] += 1
             if game['game_type'] == 'championnat':
                 games_championnat.append(game)
@@ -275,7 +283,7 @@ def stats(request):
 
     for poll in polls:
         if poll['poll_season'] == current_season:
-            for present in poll['present']:
+            for present in get_list_from_str(poll['present']):
                 strikers[present]['presence'] +=1
                 passers[present]['presence'] +=1
 
@@ -316,21 +324,28 @@ def stats(request):
         'championnat_goals_against': championnat_goals_against,
         'coupe_goals_for': coupe_goals_for,
         'coupe_goals_against': coupe_goals_against,
-    'total_competition_goals_for': total_competition_goals_for,
-    'total_all_goals_for': total_all_goals_for,
-    'total_competition_goals_against': total_competition_goals_against,
-    'total_all_goals_against': total_all_goals_against,
-    'total_competition_games': total_competition_games,
-    'total_all_games': total_all_games,
-    'ratio_all_for': ratio_all_for,
-    'ratio_competition_for': ratio_competition_for,
-    'ratio_all_against': ratio_all_against,
-    'ratio_competition_against': ratio_competition_against,
+        'total_competition_goals_for': total_competition_goals_for,
+        'total_all_goals_for': total_all_goals_for,
+        'total_competition_goals_against': total_competition_goals_against,
+        'total_all_goals_against': total_all_goals_against,
+        'total_competition_games': total_competition_games,
+        'total_all_games': total_all_games,
+        'ratio_all_for': ratio_all_for,
+        'ratio_competition_for': ratio_competition_for,
+        'ratio_all_against': ratio_all_against,
+        'ratio_competition_against': ratio_competition_against,
     }
 
     return HttpResponse(template.render(context, request))
 
+# fonctions utilitaires
 def get_player_name(id):
     player = Player.objects.get(id=id)
     player_full_name = player.first_name+' '+player.second_name
     return player_full_name
+
+def get_list_from_str(src_str):
+    src_list = src_str
+    # src_list = '['+src_str+']'
+    out_list = literal_eval(src_list)
+    return out_list
