@@ -34,8 +34,17 @@ Theme Name: Kernavélo 2023
         }
     }
     .card{
-        @apply p-4 bg-white rounded-md border-t-4 border-red-600;
-}
+        @apply p-4 bg-white rounded-md border-t-4;
+        &.answers-present{
+            @apply border-green-600;
+        }
+        &.answers-absent{
+            @apply border-red-400;
+        }
+        &.answers-staff{
+            @apply border-teal-600;
+        }
+    }
     .player{
         &.answer-none{
             @apply bg-white;
@@ -68,6 +77,12 @@ Theme Name: Kernavélo 2023
                 }
             }
         }
+        .action-stats--add, .action-stats--remove{
+            @apply transition-all delay-75 opacity-100;
+            &:hover{
+                @apply opacity-50;
+            }
+        }
     }
     .game-card{
         @apply transition-all delay-75;
@@ -84,7 +99,42 @@ Theme Name: Kernavélo 2023
             @apply bg-blue-600 text-white cursor-pointer;
         }
     }
-
+    .table{
+        @apply w-full rounded-md;
+        .table-row{
+            @apply transition-all delay-75 bg-white;
+            .table-cell{
+                @apply py-3 px-4;
+            }
+        }
+        a.table-row{
+            &:hover{
+                @apply text-slate-500 bg-slate-50;
+            }
+        }
+        .table-header-group{
+            .table-row{
+                @apply bg-white;
+                .table-cell{
+                    @apply border-b border-slate-200 text-slate-400;
+                    &.muted{
+                        @apply text-slate-500;
+                    }
+                }
+            }
+        }
+        .table-row-group{
+            .table-row{
+                @apply bg-white;
+                .table-cell{
+                    @apply border-b border-slate-200 text-slate-900;
+                    &.muted{
+                        @apply text-slate-400;
+                    }
+                }
+            }
+}
+}
 }
 @layer utilities{
 }

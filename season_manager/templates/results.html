@@ -4,26 +4,29 @@
 Games
 {% endblock %}
 {% block content %}
-<div class="table">
+<div class="flex flex-row gap-x-2 text-slate-900 mb-4 text-xl font-bold items-center"><img src="{% static 'assets/icons/emoji_events_dark.svg' %}" class="h-6 w-6" />Calendrier et résultats</div>
+<div class="rounded-md overflow-x-scroll border border-slate-200">
+    <div class="table">
     <div class="table-header-group">
-        <div class="table-row">
-            <div class="table-cell text-left p-3">Date</div>
-            <div class="table-cell text-left p-3">Match</div>
-            <div class="table-cell text-left p-3">Score</div>
-            <div class="table-cell text-left p-3">Compétition</div>
-            <div class="table-cell text-left p-3">Saison</div>
+        <div class="table-row block">
+            <div class="table-cell text-left">Date</div>
+            <div class="table-cell text-left">Match</div>
+            <div class="table-cell text-left">Score</div>
+            <div class="table-cell text-left">Compétition</div>
+            <div class="table-cell text-left">Saison</div>
         </div>
     </div>
     {% for game in games %}
     <div class="table-row-group">
-        <a class="table-row" href="http://{{request.get_host}}/game/{{game.id}}">
-            <div class="table-cell text-left p-3">{{game.game_date}}</div>
-            <div class="table-cell text-left p-3">{{game.game_title}}</div>
-            <div class="table-cell text-left p-3">{{game.game_score}}</div>
-            <div class="table-cell text-left p-3">{{game.game_type}}</div>
-            <div class="table-cell text-left p-3">{{game.game_season}}</div>
+        <a class="table-row block" href="http://{{request.get_host}}/game/{{game.id}}">
+            <div class="table-cell text-left muted">{{game.game_date}}</div>
+            <div class="table-cell text-left">{{game.game_title}}</div>
+            <div class="table-cell text-left">{{game.game_score}}</div>
+            <div class="table-cell text-left muted">{{game.game_type}}</div>
+            <div class="table-cell text-left muted">{{game.game_season}}</div>
         </a>
     </div>
     {% endfor %}
+</div>
 </div>
 {% endblock %}

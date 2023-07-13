@@ -7,6 +7,9 @@
         <script src="{% static 'js/scripts.js' %}"></script>
     </head>
     <body>
+        {% if is_admin %}
+        <div class="w-screen bg-yellow-300 text-center py-2 text-sm">Connecté en tant qu'administrateur</div>
+             {% endif %}
         <div class="w-screen flex flex-row bg-slate-100">
             <!-- dekstop menu -->
             <div class="menu mb-4 bg-slate-900 hidden tablet:block w-16 h-screen fixed top-0 left-0">
@@ -25,7 +28,7 @@
                 </ul>
             </div>
             <div class="pl-0 tablet:pl-16 w-screen">
-                <div class="container py-8 px-2 mx-auto">
+                <div class="container py-8 px-2 mx-auto mb-24 tablet:mb-0">
                 {% block content %}
                 {% endblock %}
                 </div>

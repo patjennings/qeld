@@ -4,7 +4,7 @@
 Matchs à venir
 {% endblock %}
 {% block content %}
-<div class="text-xl">Matchs à venir</div>
+<div class="flex flex-row gap-x-2 text-slate-900 mb-4 text-xl font-bold items-center"><img src="{% static 'assets/icons/calendar_month_dark.svg' %}" class="h-6 w-6" />Matchs à venir</div>
 {% for game in games %}
 {% if forloop.counter0 == 0 %}
 <!-- Prochain match -->

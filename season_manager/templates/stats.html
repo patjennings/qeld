@@ -4,7 +4,49 @@
 Games
 {% endblock %}
 {% block content %}
-<div class="text-md">Buteurs</div>
+<div class="flex flex-row gap-x-2 text-slate-900 mb-4 text-xl font-bold items-center"><img src="{% static 'assets/icons/bar_chart_dark.svg' %}" class="h-6 w-6" />Statistiques</div>
+<div class="flex flex-col gap-y-4">
+<div class="stats flex flex-row gap-x-2">
+    <div class="stat flex flex-row items-center gap-x-4 p-3 bg-emerald-600 text-white rounded-md w-96 h-fit">
+        <div class="stat--icon flex-none opacity-70"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" /></div>
+        <div class="flex flex-col gap-y-2">
+            <p class="text-md opacity-70">Totals de buts inscrits</p>
+            <p class="text-3xl">{{stats.total_competition_goals_for}}</p>
+        </div>
+    </div>
+    <div class="stat flex flex-row items-center gap-x-4 p-3 bg-amber-600 text-white rounded-md w-96 h-fit">
+        <div class="stat--icon flex-none opacity-70"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" /></div>
+        <div class="flex flex-col gap-y-2">
+            <p class="text-md opacity-70">Totals de buts encaissés</p>
+            <p class="text-3xl">{{stats.total_competition_goals_against}}</p>
+        </div>
+    </div>
+    <div class="stat flex flex-row items-center gap-x-4 p-3 bg-emerald-600 text-white rounded-md w-96 h-fit">
+        <div class="stat--icon flex-none opacity-70"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" /></div>
+        <div class="flex flex-col gap-y-2">
+            <p class="text-md opacity-70">Moyenne de buts inscrits</p>
+            <p class="text-3xl">{{stats.ratio_competition_for}}</p>
+        </div>
+    </div>
+    <div class="stat flex flex-row items-center gap-x-4 p-3 bg-amber-600 text-white rounded-md w-96 h-fit">
+        <div class="stat--icon flex-none opacity-70"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" /></div>
+        <div class="flex flex-col gap-y-2">
+            <p class="text-md opacity-70">Moyenne de buts encaissés</p>
+            <p class="text-3xl">{{stats.ratio_competition_against}}</p>
+        </div>
+    </div>
+    <div class="stat flex flex-row items-center gap-x-4 p-3 bg-gray-600 text-white rounded-md w-96 h-fit">
+        <div class="stat--icon flex-none opacity-70"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" /></div>
+        <div class="flex flex-col gap-y-2">
+            <p class="text-md opacity-70">Nombre de matchs joués</p>
+            <p class="text-3xl">{{stats.total_competition_games}}</p>
+        </div>
+    </div>
+</div>
+<div class="flex flex-col gap-y-4 tablet:flex-row gap-x-4">
+
+<div class="rounded-md truncate border border-slate-200 grow">
+    <div class="flex flex-row gap-x-2 px-4 py-3 bg-white text-slate-400"><img src="{% static 'assets/icons/sports_soccer_dark.svg' %}" class="h-6 w-6" />Buteurs</div>
 <div class="table">
     <div class="table-header-group">
         <div class="table-row">
@@ -30,7 +72,11 @@ Games
     {% endif %}
     {% endfor %}
 </div>
-<div class="text-md">Passeurs</div>
+</div>
+
+
+<div class="rounded-md truncate border border-slate-200 grow">
+<div class="flex flex-row gap-x-2 px-4 py-3 bg-white text-slate-400"><img src="{% static 'assets/icons/handshake_dark.svg' %}" class="h-6 w-6" />Passeurs</div>
 <div class="table">
     <div class="table-header-group">
         <div class="table-row">
@@ -56,27 +102,40 @@ Games
     {% endif %}
     {% endfor %}
 </div>
-<div class="stats flex flex-row">
-    <div class="stat flex flex-col">
-        <p class="text-sm">Totals de buts inscrits</p>
-        <p class="text-xl">{{total_competition_goals_for}}</p>
-    </div>
-    <div class="stat flex flex-col">
-        <p class="text-sm">Totals de buts encaissés</p>
-        <p class="text-xl">{{total_competition_goals_against}}</p>
-    </div>
-    <div class="stat flex flex-col">
-        <p class="text-sm">Totals de matchs joués</p>
-        <p class="text-xl">{{total_competition_games}}</p>
-    </div>
+</div>
 
-    <div class="stat flex flex-col">
-        <p class="text-sm">Moyenne de buts marqués</p>
-        <p class="text-xl">{{ratio_competition_for}}</p>
+</div>
+
+{% if is_admin %}
+<div class="w-full">
+<div class="rounded-md truncate border border-slate-200 grow">
+<div class="flex flex-row gap-x-2 px-4 py-3 bg-white text-slate-400"><img src="{% static 'assets/icons/bar_chart_dark.svg' %}" class="h-6 w-6" />Statistiques complètes</div>
+<div class="table">
+    <div class="table-header-group">
+        <div class="table-row">
+            <div class="table-cell text-left p-3">Joueur</div>
+            <div class="table-cell text-left p-3">Passes décisives</div>
+        </div>
     </div>
-    <div class="stat flex flex-col">
-        <p class="text-sm">Moyenne de buts encaissés</p>
-        <p class="text-xl">{{ratio_competition_against}}</p>
+    <div class="table-row-group">
+        {% for stat, value in stats.items %}
+        <div class="table-row">
+            <div class="table-cell text-left p-3">
+                {{stat}}
+            </div>
+            <div class="table-cell text-left p-3">{{value}}</div>
+        </div>
+        {% endfor %}
     </div>
 </div>
+</div>
+</div>
+{% endif %}
+
+
+</div>
+
+
+
+
 {% endblock %}
