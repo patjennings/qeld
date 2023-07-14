@@ -34,18 +34,16 @@ class Command(BaseCommand):
             # print(data)
             for i,x in data.items():
                 # créer le sondage
-                new_poll = Poll()
+                new_poll = Poll(poll_season=x['season'])
                 new_poll.save()
                 # récupérer l'id du sondage créé
-                new_game = Game(game_title=x['title'], game_date=x['date'], game_time=x['time'], game_place=x['place'], game_coordinates=x['coordinates'], game_poll_id=new_poll.id, game_type=x['type'], game_season=x['season'])
+                new_game = Game(game_title=x['title'], game_date=x['date'], game_time=x['time'], game_place=x['place'], game_poll_id=new_poll.id, game_type=x['type'], game_season=x['season'], game_team_away=x['team_away'], game_team_home=x['team_home'])
                 new_game.save()
-            print('Matchs importées')
+            print('Matchs importés')
 
         # Emplacement du fichier 
         path = input('Chemin du fichier : ')
-        # path = '/Users/patjennings/games_championnat.csv'
         import_type = input('quelles données ont importées ? (joueurs=j | matchs = m) ')
-        # import_type = 'joueurs' # joueurs ou matchs
         data = {}
         with open(path) as f:
             reader = csv.reader(f)
@@ -56,7 +54,7 @@ class Command(BaseCommand):
             elif import_type == 'm':
                 for i,row in enumerate(reader):
                     if i != 0: # skip header
-                        data[i] = {'title': row[0], 'date': row[1], 'time': row[2], 'place': row[3], 'coordinates': [row[4], row[5]], 'type': row[6], 'season': row[7]}
+                        data[i] = {'team_home': row[0], 'team_away': row[1], 'title': row[0]+' — '+row[1], 'date': row[2], 'time': row[3], 'place': row[4], 'type': row[5], 'season': row[6]}
 
         # confirmation de l'import
         for i in data:

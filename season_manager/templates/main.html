@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <script src="{% static 'js/scripts.js' %}"></script>
@@ -14,17 +15,19 @@
             <!-- dekstop menu -->
             <div class="menu mb-4 bg-slate-900 hidden tablet:block w-16 h-screen fixed top-0 left-0">
                 <ul class="flex flex-col">
-                    <li><a href="http://{{request.get_host}}/games" class="p-4 block"><img src="{% static 'assets/icons/calendar_month.svg' %}"/></a></li>
-                    <li><a href="http://{{request.get_host}}/results" class="p-4 block"><img src="{% static 'assets/icons/emoji_events.svg' %}"/></a></li>
-                    <li><a href="http://{{request.get_host}}/stats" class="p-4 block"><img src="{% static 'assets/icons/bar_chart.svg' %}"/></a></li>
+                    <li><a href="/" class="p-4 block"><img src="{% static 'assets/icons/home_white.svg' %}"/></a></li>
+                    <li><a href="/games" class="p-4 block"><img src="{% static 'assets/icons/calendar_month.svg' %}"/></a></li>
+                    <li><a href="/results" class="p-4 block"><img src="{% static 'assets/icons/emoji_events.svg' %}"/></a></li>
+                    <li><a href="/stats" class="p-4 block"><img src="{% static 'assets/icons/bar_chart.svg' %}"/></a></li>
                 </ul>
             </div>
             <!-- mobile menu -->
             <div class="menu bg-white block tablet:hidden h-fit w-screen fixed bottom-0 border-t border-gray-200">
                 <ul class="flex flex-row items-center w-fit mx-auto">
-                    <li><a href="http://{{request.get_host}}/games" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/calendar_month_dark.svg' %}" class="mb-1" />Matchs à venir</a></li>
-                    <li><a href="http://{{request.get_host}}/results" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/emoji_events_dark.svg' %}"/>Résultats</a></li>
-                    <li><a href="http://{{request.get_host}}/stats" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/bar_chart_dark.svg' %}"/>Statistiques</a></li>
+                    <li><a href="/" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/home_dark.svg' %}" class="mb-1" />Accueil</a></li>
+                    <li><a href="/games" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/calendar_month_dark.svg' %}" class="mb-1" />Matchs à venir</a></li>
+                    <li><a href="/results" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/emoji_events_dark.svg' %}"/>Résultats</a></li>
+                    <li><a href="/stats" class="p-4 block flex flex-col items-center my-1"><img src="{% static 'assets/icons/bar_chart_dark.svg' %}"/>Statistiques</a></li>
                 </ul>
             </div>
             <div class="pl-0 tablet:pl-16 w-screen">

@@ -20,35 +20,33 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        def import_games(data):
+        def add_game(data):
             # games = Game.objects.all().values()
-            # print(data)
-            for i,x in data.items():
-                # créer le sondage
-                new_poll = Poll()
-                new_poll.save()
-                # récupérer l'id du sondage créé
-                new_game = Game(game_title=x['title'], game_date=x['date'], game_time=x['time'], game_place=x['place'], game_coordinates=x['coordinates'], game_poll_id=new_poll.id, game_type=x['type'], game_season=x['season'])
-                new_game.save()
+            # créer le sondage
+            new_poll = Poll(poll_season=data['season'])
+            new_poll.save()
+            # récupérer l'id du sondage créé
+            new_game = Game(game_title=data['title'], game_date=data['date'], game_time=data['time'], game_place=data['place'], game_poll_id=new_poll.id, game_type=data['type'], game_season=data['season'], game_team_home=data['team_home'], game_team_away=data['team_away'])
+            new_game.save()
             print('Nouveau match créé')
 
         # Emplacement du fichier 
         # import_type = 'joueurs' # joueurs ou matchs
-        title = input('Nom du match : ')
+        team_home = input('Équipe qui reçoit : ')
+        team_away = input('Équipe qui se déplace : ')
         date = input('Date (format yyyy-mm-dd) : ')
-        time = input('Heure (format hh:mm) : ')
-        place = input('Lieu : ')
-        latitude = input('Latitude du terrain : ')
-        longitude = input('Longitude du terrain : ')
+        time = input('Heure (format hh:mm:ss) : ')
+        place = input('Lieu (slug): ')
         type = input('Compétition (amical, championnat, coupe) : ')
         season = input('Saison : ')
-        data = {'title': title, 'date': date, 'time': time, 'place': place, 'coordinates': [latitude, longitude], 'type': type, 'season': season}
+        title = team_home+' — '+team_away
+        data = {'title': title, 'date': date, 'time': time, 'place': place, 'type': type, 'season': season, 'team_home': team_home, 'team_away': team_away}
 
         # confirmation de l'import
         print(data)
         confirmation = input('Voici les données à importer. Ok ? (y|n)')
 
         if confirmation == 'y':
-            import_games(data)
+            add_game(data)
         else:
             print('abandon')

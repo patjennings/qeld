@@ -9,7 +9,7 @@ Matchs à venir
 {% if forloop.counter0 == 0 %}
 <!-- Prochain match -->
 <div class="rounded-full bg-blue-700 text-white pl-2 pr-4 py-1 flex flex-row w-fit relative -left-4 top-4 top-0"><img src="{% static 'assets/icons/arrow_forward.svg' %}" class="mr-1" />Prochain match</div>
-<a href="http://{{request.get_host}}/game/{{game.id}}" class="game-card pt-7 pb-4 px-4 mb-2 rounded-md bg-slate-800 text-white block flex flex-col laptop:flex-row">
+<a href="/game/{{game.id}}" class="game-card pt-7 pb-4 px-4 mb-2 rounded-md bg-slate-800 text-white block flex flex-col laptop:flex-row">
     <div class="infos w-3/4 mb-2 laptop:mb-0">
         <p class="text-base text-slate-400">{{game.game_type}}</p>
         <p class="text-2xl mb-2">{{game.game_title}}</p>
@@ -35,7 +35,7 @@ Matchs à venir
    </a>
     {% else %}
 <!-- matchs suivants -->
-   <a href="http://{{request.get_host}}/game/{{game.id}}" class="game-card p-4 mb-2 rounded-md bg-white text-slate-900 block flex flex-col laptop:flex-row">
+   <a href="/game/{{game.id}}" class="game-card p-4 mb-2 rounded-md bg-white text-slate-900 block flex flex-col laptop:flex-row">
     
     <div class="infos w-3/4 mb-2 laptop:mb-0">
         <div class="text-base">{{game.game_title}}<span class="text-base text-slate-400 ml-2">{{game.game_type}}</span></div>

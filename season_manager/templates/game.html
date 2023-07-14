@@ -78,7 +78,7 @@
         </div>
         {% endif %}
     </div>
-    <div class="col flex flex-col tablet:flex-row gap-4"> 
+    <div class="col flex flex-col-reverse tablet:flex-row gap-4"> 
         <div class="convocation-list w-full tablet:w-6/12 flex flex-col gap-y-2">
 
             {% for id, player in players_list.items %}
@@ -86,32 +86,32 @@
                 <div class="answer--main flex flex-row items-center p-3">
                     <div class="flex grow items-center gap-x-2">{% if id in players_poll_done %}<img src="{% static 'assets/icons/check_color_sm.svg' %}" class="h-4 w-4" /> {% endif %}{{player}}</div>
                     <div class="actions flex flex-row w-fit items-center grow-0">
-                        <a href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=present" class="action--answer present"><img src="{% static 'assets/icons/person_color.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=absent" class="action--answer absent"><img src="{% static 'assets/icons/person_off_color.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=audience" class="action--answer staff"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=present" class="action--answer present"><img src="{% static 'assets/icons/person_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=absent" class="action--answer absent"><img src="{% static 'assets/icons/person_off_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=audience" class="action--answer staff"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" /></a>
                     </div>
                 </div>
                 {% if is_admin %}
                 <div class="actions-stats flex flex-row {% if id in players_poll_done %} bg-lime-50 {% else %} bg-gray-50 {% endif %} gap-x-6 p-3">
                     <div class="actions-stats--goals flex flex-row gap-x-1">
                         <div class=""><img src="{% static 'assets/icons/sports_soccer_color.svg' %}" class="h-6 w-6" /></div>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_goals&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
                     </div>
                     <div class="actions-stats--goals flex flex-row gap-x-1">
                         <div class=""><img src="{% static 'assets/icons/handshake_color.svg' %}" class="h-6 w-6" /></div>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_assists&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
                     </div>
                     <div class="actions-stats--goals flex flex-row gap-x-1">
                         <div class=""><img src="{% static 'assets/icons/yellow_card.svg' %}" class="h-6 w-6" /></div>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_yellowcards&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
                     </div>
                     <div class="actions-stats--goals flex flex-row gap-x-1">
                         <div class=""><img src="{% static 'assets/icons/red_card.svg' %}" class="h-6 w-6" /></div>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
-                        <a href="http://{{request.get_host}}/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=add" class="action-stats--add" class="action-stats--add"><img src="{% static 'assets/icons/add_circle_dark.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/game/{{game.id}}/update_game_stats/?player={{id}}&game={{game.id}}&field=game_redcards&method=remove" class="action-stats--add" class="action-stats--remove"><img src="{% static 'assets/icons/remove_circle_dark.svg' %}" class="h-6 w-6" /></a>
                     </div>
                 </div>
                 {% endif %}
@@ -119,8 +119,9 @@
 
             {% endfor %}
         </div>
-        <div class="col w-full tablet:w-3/12">
-            <div class="answers-present card">
+        <div class="col w-full tablet:w-6/12 flex flex-col laptop:flex-row gap-x-4 gap-y-4">
+            <div class="col w-full laptop:w-1/2">
+                <div class="answers-present card">
                     <div class="flex flex-row title mb-3 place-content-between">
                         <div class="flex flex-row title mb-3 font-bold text-slate-500">Présents</div>
                         <div class="compteur"><div class="tag bg-green-600">{{present_for_game}}</div></div>
@@ -130,29 +131,30 @@
                         <div class="flex flex-row gap-x-1"><img src="{% static 'assets/icons/person_color.svg' %}" class="h-6 w-6" />{{player}}</div> 
                         {% endfor %}
                     </div>
-            </div>
-        </div>
-        <div class="col w-full tablet:w-3/12 flex flex-col gap-y-4">
-            <div class="answers-absent card">
-                <div class="flex flex-row title mb-3 place-content-between">
-                    <div class="flex flex-row title mb-3 font-bold text-slate-500">Absents</div>
-                    <div class="compteur"><div class="tag bg-red-400">{{absent_for_game}}</div></div>
                 </div>
+            </div>
+            <div class="col w-full laptop:w-1/2 flex flex-col gap-y-4">
+                <div class="answers-absent card">
+                    <div class="flex flex-row title mb-3 place-content-between">
+                        <div class="flex flex-row title mb-3 font-bold text-slate-500">Absents</div>
+                        <div class="compteur"><div class="tag bg-red-400">{{absent_for_game}}</div></div>
+                    </div>
                     <div class="">
                         {% for id, player in poll_absent.items %}
                         <div class="flex flex-row gap-x-1"><img src="{% static 'assets/icons/person_off_color.svg' %}" class="h-6 w-6" />{{player}}</div> 
                         {% endfor %}
                     </div>
-            </div>
-            <div class="answers-staff card">
-                <div class="flex flex-row title mb-3 place-content-between">
-                    <div class="flex flex-row title mb-3 font-bold text-slate-500">Buts</div>
-                    <div class="compteur"><div class="tag bg-cyan-600">{{staff_for_game}}</div></div>
                 </div>
-                <div class="">
-                    {% for id, player in poll_audience.items %}
-                    <div class="flex flex-row gap-x-1"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" />{{player}}</div> 
-                    {% endfor %}
+                <div class="answers-staff card">
+                    <div class="flex flex-row title mb-3 place-content-between">
+                        <div class="flex flex-row title mb-3 font-bold text-slate-500">Staff/spectateur</div>
+                        <div class="compteur"><div class="tag bg-cyan-600">{{staff_for_game}}</div></div>
+                    </div>
+                    <div class="">
+                        {% for id, player in poll_audience.items %}
+                        <div class="flex flex-row gap-x-1"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" />{{player}}</div> 
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

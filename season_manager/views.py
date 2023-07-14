@@ -10,6 +10,20 @@ from ast import literal_eval
 __season = '2023-2024'
 
 # Create your views here.
+def home(request):
+    if check_user(request):
+        is_admin = True
+    else:
+        is_admin = False
+    template = loader.get_template('home.html')
+    context = {
+        'title': 'This is les Piliers',
+        'is_admin': is_admin
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
 def games(request):
     if check_user(request):
         is_admin = True
@@ -211,6 +225,11 @@ def poll_answer(request, id):
 
 
 def results(request):
+    if check_user(request):
+        is_admin = True
+    else:
+        is_admin = False
+
     games = Game.objects.all().values()
     display_season = request.GET.get('display_season')
 
@@ -230,6 +249,7 @@ def results(request):
     template = loader.get_template('results.html')
     context = {
         'games': sorted_games_list,
+        'is_admin': is_admin
     }
 
     return HttpResponse(template.render(context, request))

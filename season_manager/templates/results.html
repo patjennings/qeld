@@ -18,7 +18,7 @@ Games
     </div>
     {% for game in games %}
     <div class="table-row-group">
-        <a class="table-row block" href="http://{{request.get_host}}/game/{{game.id}}">
+        <a class="table-row block" href="/game/{{game.id}}">
             <div class="table-cell text-left muted">{{game.game_date}}</div>
             <div class="table-cell text-left">{{game.game_title}}</div>
             <div class="table-cell text-left">{{game.game_score}}</div>

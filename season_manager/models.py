@@ -24,7 +24,6 @@ class Game(models.Model):
     game_status = models.CharField(max_length=255, default='planned')
     game_type = models.CharField(max_length=255)
     game_place = models.CharField(max_length=255,default='None')
-    game_coordinates = models.CharField(max_length=255, default='[]')
     game_poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     game_season = models.CharField(max_length=255,default='')
 

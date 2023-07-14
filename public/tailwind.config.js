@@ -12,6 +12,12 @@ module.exports = {
             'laptop': '960px',
             'desktop': '1024px',
         },
+        extend: {
+            backgroundImage: {
+                'hero-image': "url('/public/assets/piliers_2023.jpg')"
+}
+            
+}
     }
 }
 
