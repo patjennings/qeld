@@ -15,5 +15,5 @@ scp -rp ~/Documents/dev/qeld/season_manager/templates/* debian@51.210.101.191:/v
 scp -rp ~/Documents/dev/qeld/season_manager/models.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 scp -rp ~/Documents/dev/qeld/season_manager/urls.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 scp -rp ~/Documents/dev/qeld/season_manager/views.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
-# scp -rp ~/Documents/dev/qeld/db.sqlite3 debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/
+scp -rp ~/Documents/dev/qeld/db.sqlite3 debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/
 

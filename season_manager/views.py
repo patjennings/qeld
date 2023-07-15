@@ -67,7 +67,7 @@ def games(request):
 
 def game(request, id):
     game = Game.objects.get(id=id)
-    players = Player.objects.all().values()
+    players = Player.objects.all().order_by('second_name').values()
     poll = Poll.objects.get(id=game.game_poll_id)
 
     if check_user(request):
@@ -117,6 +117,9 @@ def game(request, id):
     for i,p in poll_audience.items():
         if i not in players_poll_done:
             players_poll_done.append(i)
+
+
+    print(players_list)
 
     template = loader.get_template('game.html')
 
@@ -233,6 +236,8 @@ def results(request):
     games = Game.objects.all().values()
     display_season = request.GET.get('display_season')
 
+    seasons_list = get_seasons_from_games(games)
+
     # check la saison affichée
     current_season = __season
     if display_season != None:
@@ -249,7 +254,9 @@ def results(request):
     template = loader.get_template('results.html')
     context = {
         'games': sorted_games_list,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'seasons_list' : seasons_list,
+        'current_season': __season
     }
 
     return HttpResponse(template.render(context, request))
@@ -264,6 +271,8 @@ def stats(request):
     games = Game.objects.all().values()
     players = Player.objects.all().values()
     polls = Poll.objects.all().values()
+
+    seasons_list = get_seasons_from_games(games)
 
     # check la saison affichée
     display_season = request.GET.get('display_season')
@@ -367,7 +376,9 @@ def stats(request):
         'strikers': sorted_strikers_dict,
         'passers': sorted_passers_dict,
         'stats': stats,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'seasons_list' : seasons_list,
+        'current_season': __season
     }
 
     return HttpResponse(template.render(context, request))
@@ -399,3 +410,14 @@ def check_user(request):
         return True
     else:
         return False
+
+def get_seasons_from_games(games):
+    seasons_list = []
+    for game in games:
+        # print(game['game_season'])
+        if game['game_season'] not in seasons_list:
+            seasons_list.append(game['game_season'])
+
+    # sorted_seasons_list = sorted(seasons_list.items(), reverse=True)
+    seasons_list.sort(reverse=True)
+    return seasons_list
