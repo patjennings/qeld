@@ -36,7 +36,7 @@
                     <div class="flex flex-row title mb-3 gap-x-2"><img src="{% static 'assets/icons/sports_soccer_white.svg' %}" class="h-6 w-6" />Buteurs <div class="tag bg-slate-900">{{game.goals_for}}</div> </div>
                     <div class="">
                         {% for striker in game_goals %}
-                        {% for i, player in players_list.items %}
+                        {% for i, player in players_list_full.items %}
                         {% if i == striker %}
                         <p>{{player}}</p>
                         {% endif %}
@@ -48,7 +48,7 @@
                     <div class="flex flex-row title mb-3 pl-7 gap-x-2"><img src="{% static 'assets/icons/handshake_white.svg' %}" class="h-6 w-6" />Passeurs</div>
                     <div class="">
                         {% for assist in game_assists %}
-                        {% for i, player in players_list.items %}
+                        {% for i, player in players_list_full.items %}
                         {% if i == assist %}
                         <p class="flex flex-row"><img src="{% static 'assets/icons/arrow-left_white.svg' %}" class="h-6 w-6 mr-2" />{{player}}</p>
                         {% endif %}
@@ -60,14 +60,14 @@
             <div class="cards flex justify-center">
                 <div class="w-1/2">
                     {% for yellowcard in game_yellowcards %}
-                    {% for i, player in players_list.items %}
+                    {% for i, player in players_list_full.items %}
                     {% if i == yellowcard %}
                     <p class="flex flex-row gap-x-2"><img src="{% static 'assets/icons/yellow_card.svg' %}" class="h-6 w-6" />{{player}}</p>
                     {% endif %}
                     {% endfor %}
                     {% endfor %}
                     {% for redcard in game_redcards %}
-                    {% for i, player in players_list.items %}
+                    {% for i, player in players_list_full.items %}
                     {% if i == redcard %}
                     <p class="flex flex-row gap-x-2"><img src="{% static 'assets/icons/red_card.svg' %}" class="h-6 w-6" />{{player}}</p>
                     {% endif %}

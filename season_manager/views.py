@@ -86,7 +86,6 @@ def game(request, id):
 
     game_status = game.game_status # planned, delayed ou played : planned, delayed, on affiche. Played, on affiche le score
 
-
     if is_game_past(game.game_date):
         game_status = 'played'
 
@@ -94,12 +93,16 @@ def game(request, id):
     poll_absent = {}
     poll_audience = {}
 
-    players_list = {}
+    players_list = {} # la liste des joueurs actifs, pour le sondage
+    players_list_full = {} # la liste complète des joueurs, hors actif/non actif, pour garder la trace des buteurs, cartons, etc.
     players_poll_done = []
 
     for p in players:
         if p['status'] is True:
             players_list[p['id']] = get_player_name(p['id'])
+            
+    for p in players:
+        players_list_full[p['id']] = get_player_name(p['id'])
 
     for pr in poll_present_list:
         poll_present[pr] = get_player_name(pr)
@@ -130,6 +133,7 @@ def game(request, id):
         'game_yellowcards': get_list_from_str(game.game_yellowcards),
         'game_redcards': get_list_from_str(game.game_redcards),
         'players_list': players_list,
+        'players_list_full': players_list_full,
         'poll_present': poll_present,
         'poll_absent': poll_absent,
         'poll_audience': poll_audience,
