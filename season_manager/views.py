@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .forms import AuthForm
-from .models import Game,Poll,Player
+from .models import Game,Poll,Player,Ground
 # from datetime import datetime, date, time
 import datetime
 from var_dump import var_dump
@@ -33,6 +33,7 @@ def games(request):
 
     print(is_admin)
     games = Game.objects.all().values()
+    grounds = Ground.objects.all().values()
     print(__season)
 
     games_list = []
@@ -59,6 +60,7 @@ def games(request):
     template = loader.get_template('games.html')
     context = {
         'games': sorted_games_list,
+        'grounds': grounds,
         'present_for_game': present_for_game,
         'absent_for_game': absent_for_game,
         'is_admin': is_admin
@@ -68,9 +70,10 @@ def games(request):
 
 def game(request, id):
     game = Game.objects.get(id=id)
-    game = Game.objects.get(id=id)
     players = Player.objects.all().order_by('second_name').values()
     poll = Poll.objects.get(id=game.game_poll_id)
+
+    ground = Ground.objects.get(id=game.game_ground_id)
 
     # sert quand la page affiche l'auth pour l'enregistrement d'un joueur
     auth_process = request.GET.get('auth_process')
@@ -78,10 +81,12 @@ def game(request, id):
     player_id = request.GET.get('player')
     player_status = request.GET.get('player_status')
 
+
     if check_user(request):
         is_admin = True
     else:
         is_admin = False
+
     # on commence par transformer les strings de la base en vraies listes
     poll_present_list = get_list_from_str(poll.present)
     poll_absent_list = get_list_from_str(poll.absent)
@@ -129,6 +134,16 @@ def game(request, id):
         if i not in players_poll_done:
             players_poll_done.append(i)
 
+    ground_bbox = [
+        ground.long-0.02,
+        ground.lat-0.008,
+        ground.long+0.02,
+        ground.lat+0.008
+]
+    ground_location = [ground.lat, ground.long]
+    # ground_location = 'toto'
+    print(ground_location)
+    print(ground_bbox)
 
     # print(players_list)
     # print(player_id)
@@ -141,6 +156,9 @@ def game(request, id):
         'game_assists': get_list_from_str(game.game_assists),
         'game_yellowcards': get_list_from_str(game.game_yellowcards),
         'game_redcards': get_list_from_str(game.game_redcards),
+        'game_ground': ground,
+        'game_ground_bbox': ground_bbox,
+        'game_ground_location': ground_location,
         'players_list': players_list,
         'players_list_full': players_list_full,
         'poll_present': poll_present,
@@ -207,6 +225,7 @@ def poll_answer(request, id):
     player = Player.objects.get(id=player_id)
     poll = Poll.objects.get(id=game_poll_id)
 
+
     poll_present = get_list_from_str(poll.present)
     poll_absent = get_list_from_str(poll.absent)
     poll_audience = get_list_from_str(poll.audience)
@@ -228,13 +247,10 @@ def poll_answer(request, id):
     # comparer ce qui passe par le champ et le mot de passe demandé
     # définir la valeur de authValid
     if request.method == "POST":
-        print('le mot de passe est entré')
-        # create a form instance and populate it with data from the request:
         form = AuthForm(request.POST)
-        # print(authForm)
         if form.is_valid():
             user_input = form.cleaned_data['password']
-            if user_input == 'ed83':
+            if user_input == player.password:
                 auth_valid = True
             else:
                 auth_valid = False

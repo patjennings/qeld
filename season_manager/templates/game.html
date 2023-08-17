@@ -1,4 +1,5 @@
 {% extends "main.html" %}
+{% load l10n %}
 {% load static %}
 {% block title %}
 {{game.game_title}} - {{game.game_date}}
@@ -10,7 +11,7 @@
     <div class="infos rounded-md bg-slate-800 text-white p-6 mb-4">
         <div class="datetime justify-center flex flex-col tablet:flex-row mb-4">
             <p class="text-base mr-2 flex flex-row text-slate-400"><img src="{% static 'assets/icons/clock.svg' %}" class="mr-1 h-6 w-6" /> {{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
-            <p class="text-base flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="mr-1 h-6 w-6" />{{game.game_place}}</p>
+            <p class="text-base flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="mr-1 h-6 w-6" />{{game.game_ground.name}}</p>
         </div>
         <div class="title mb-4 flex flex-row items-center">
             <div class="team-home text-xl tablet:text-2xl text-right grow">{{game.game_team_home}}</div>
@@ -77,6 +78,10 @@
             </div>
         </div>
         {% endif %}
+    </div>
+    <div class="map mb-4 rounded-md">
+        <!-- <iframe width="100%" height="320" src="https://www.openstreetmap.org/export/embed.html?bbox=-4.119164943695069%2C48.02041497133033%2C-4.074082374572755%2C48.0371613875379&amp;layer=mapnik&amp;marker=48.02879603461277%2C-4.096634387969971"></iframe> -->
+        <iframe width="100%" height="320" src="https://www.openstreetmap.org/export/embed.html?bbox={{game_ground_bbox.0|unlocalize}},{{game_ground_bbox.1|unlocalize}},{{game_ground_bbox.2|unlocalize}},{{game_ground_bbox.3|unlocalize}}&layer=mapnik&marker={{game_ground_location.0|unlocalize}},{{game_ground_location.1|unlocalize}}"></iframe>
     </div>
     <div class="col flex flex-col-reverse tablet:flex-row gap-4"> 
         <div class="convocation-list w-full tablet:w-6/12 flex flex-col gap-y-2">
@@ -162,16 +167,18 @@
 </div>
 
 {% if auth_process == 'True' %}
-<div class="w-full h-full bg-black/80 fixed top-0 left-0 z-999 flex content-center">
-    <div class="p-4 bg-white w-fit flex">
-        <p>Auth needed</p>
-        {{player_id}}
-        <form action="/poll_answer/{{game.game_poll_id}}?player={{player_id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&player_status={{player_status}}" method="post">
+<div class="w-full h-full bg-black/80 fixed top-0 left-0 z-999 flex justify-center items-center">
+    <div class="p-6 bg-white w-fit h-fit flex flex-col rounded-md">
+        <p class="">Mot de passe</p>
+        <p class="mb-4 text-sm text-gray-400">Le mot de passe est nécessaire pour mettre à jour sa présence</p>
+        <form action="/poll_answer/{{game.game_poll_id}}?player={{player_id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&player_status={{player_status}}" method="post" class="flex flex-col">
             {% csrf_token %}
             {{form}}
-            <label><input type="text" name="password" id="password" value="{{tags_list_for_edit}}" class="rounded px-2 py-1 border-gray-200 border"></label>
-            <input type="submit" value="Valider" class="button submit"/>
-            <a class="button" href="/game/{{game.id}}">Annuler<a/>
+            <label><input type="text" name="password" id="password" value="{{tags_list_for_edit}}" class="rounded px-2 py-1 mb-4 border-gray-200 border w-full"></label>
+            <div class="flex flex-row">
+                <input type="submit" value="Valider" class="button submit w-fit"/>
+                <a class="button" href="/game/{{game.id}}">Annuler<a/>
+            </div>
         </form>
     </div>
 </div>

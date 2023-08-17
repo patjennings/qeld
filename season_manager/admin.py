@@ -37,9 +37,9 @@ class GameAdmin(ImportExportModelAdmin):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'status']
+    list_display = ['full_name', 'status', 'id']
     list_filter = ['status']
 
 @admin.register(Ground)
 class GroundAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'city']
+    list_display = ['name', 'city', 'id']

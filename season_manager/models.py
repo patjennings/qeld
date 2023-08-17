@@ -12,6 +12,7 @@ class Player(models.Model):
     first_name = models.CharField(max_length=255)
     second_name = models.CharField(max_length=255)
     status = models.BooleanField()
+    password = models.CharField(max_length=255, default='')
     def full_name(self):
         full_name = self.first_name+' '+self.second_name
         return full_name
@@ -21,6 +22,8 @@ class Ground(models.Model):
     lat = models.FloatField()
     long = models.FloatField()
     city = models.CharField(max_length=255)
+    def __str__(self):
+        return f'{self.name} ({self.pk})'
 
 class Game(models.Model):
     game_title = models.CharField(max_length=255)
@@ -35,7 +38,7 @@ class Game(models.Model):
     game_assists = models.CharField(max_length=255, default='[]')
     game_redcards = models.CharField(max_length=255, default='[]')
     game_yellowcards = models.CharField(max_length=255, default='[]')
-    game_status = models.CharField(max_length=255, default='planned')
+    game_status = models.CharField(max_length=255, default='planned', choices=[('planned', 'Planned'), ('delayed', 'Delayed'), ('played', 'Played')])
     game_type = models.CharField(max_length=255)
     game_poll = models.ForeignKey(Poll, on_delete=models.CASCADE, null=True)
     game_season = models.CharField(max_length=255,default='')
