@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from .forms import AuthForm
 from .models import Game,Poll,Player
 # from datetime import datetime, date, time
 import datetime
@@ -67,8 +68,15 @@ def games(request):
 
 def game(request, id):
     game = Game.objects.get(id=id)
+    game = Game.objects.get(id=id)
     players = Player.objects.all().order_by('second_name').values()
     poll = Poll.objects.get(id=game.game_poll_id)
+
+    # sert quand la page affiche l'auth pour l'enregistrement d'un joueur
+    auth_process = request.GET.get('auth_process')
+    auth_valid = request.GET.get('auth_valid')
+    player_id = request.GET.get('player')
+    player_status = request.GET.get('player_status')
 
     if check_user(request):
         is_admin = True
@@ -100,7 +108,7 @@ def game(request, id):
     for p in players:
         if p['status'] is True:
             players_list[p['id']] = get_player_name(p['id'])
-            
+
     for p in players:
         players_list_full[p['id']] = get_player_name(p['id'])
 
@@ -122,7 +130,8 @@ def game(request, id):
             players_poll_done.append(i)
 
 
-    print(players_list)
+    # print(players_list)
+    # print(player_id)
 
     template = loader.get_template('game.html')
 
@@ -142,7 +151,11 @@ def game(request, id):
         'staff_for_game': staff_for_game,
         'players_poll_done': players_poll_done,
         'status': game_status,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'auth_process': auth_process,
+        'auth_valid': auth_valid,
+        'player_id': player_id,
+        'player_status': player_status
     }
 
     return HttpResponse(template.render(context, request))
@@ -186,7 +199,9 @@ def poll_answer(request, id):
     game_id = request.GET.get('game')
     player_id = request.GET.get('player')
     game_poll_id = request.GET.get('poll')
-    answer_status = request.GET.get('status')
+    auth_process = request.GET.get('auth_process') # is the answer is pending
+    auth_valid = request.GET.get('auth_valid') # is the auth valid
+    player_status = request.GET.get('player_status')
 
     game = Game.objects.get(id=game_id)
     player = Player.objects.get(id=player_id)
@@ -210,25 +225,42 @@ def poll_answer(request, id):
         else:
             return li
 
-    if answer_status == 'present':
-        poll.present = str(add_to_list(player_id, poll_present))
-        poll.absent = str(remove_from_list(player_id, poll_absent))
-        poll.audience = str(remove_from_list(player_id, poll_audience))
-        poll.save()
-    elif answer_status == 'absent':
-        poll.absent = str(add_to_list(player_id, poll_absent))
-        poll.present = str(remove_from_list(player_id, poll_present))
-        poll.audience = str(remove_from_list(player_id, poll_audience))
-        poll.save()
-    elif answer_status == 'audience':
-        poll.audience = str(add_to_list(player_id, poll_audience))
-        poll.present = str(remove_from_list(player_id, poll_present))
-        poll.absent = str(remove_from_list(player_id, poll_absent))
-        poll.save()
-    else:
-        print('erreur')
+    # comparer ce qui passe par le champ et le mot de passe demandé
+    # définir la valeur de authValid
+    if request.method == "POST":
+        print('le mot de passe est entré')
+        # create a form instance and populate it with data from the request:
+        form = AuthForm(request.POST)
+        # print(authForm)
+        if form.is_valid():
+            user_input = form.cleaned_data['password']
+            if user_input == 'ed83':
+                auth_valid = True
+            else:
+                auth_valid = False
 
-    return HttpResponseRedirect("/game/"+str(game_id))
+    if auth_valid == True:
+        if player_status == 'present':
+            poll.present = str(add_to_list(player_id, poll_present))
+            poll.absent = str(remove_from_list(player_id, poll_absent))
+            poll.audience = str(remove_from_list(player_id, poll_audience))
+            poll.save()
+        elif player_status == 'absent':
+            poll.absent = str(add_to_list(player_id, poll_absent))
+            poll.present = str(remove_from_list(player_id, poll_present))
+            poll.audience = str(remove_from_list(player_id, poll_audience))
+            poll.save()
+        elif player_status == 'audience':
+            poll.audience = str(add_to_list(player_id, poll_audience))
+            poll.present = str(remove_from_list(player_id, poll_present))
+            poll.absent = str(remove_from_list(player_id, poll_absent))
+            poll.save()
+        else:
+            print('erreur')
+        return HttpResponseRedirect("/game/"+str(game_id)+"?player="+player_id+"&player_status="+player_status+"&auth_valid=True&auth_process=False")
+    else:
+        # print('answer pending')
+        return HttpResponseRedirect("/game/"+str(game_id)+"?player="+player_id+"&player_status="+player_status+"&auth_valid=False&auth_process=True")
 
 
 def results(request):
@@ -388,6 +420,7 @@ def stats(request):
     return HttpResponse(template.render(context, request))
 
 # fonctions utilitaires
+# récupérer le nom du joueur à partir de l'id
 def get_player_name(id):
     player = Player.objects.get(id=id)
     player_full_name = player.first_name+' '+player.second_name

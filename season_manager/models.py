@@ -8,6 +8,20 @@ class Poll(models.Model):
     audience = models.CharField(max_length=255, default='[]')
     poll_season = models.CharField(max_length=255,default='')
 
+class Player(models.Model):
+    first_name = models.CharField(max_length=255)
+    second_name = models.CharField(max_length=255)
+    status = models.BooleanField()
+    def full_name(self):
+        full_name = self.first_name+' '+self.second_name
+        return full_name
+
+class Ground(models.Model):
+    name = models.CharField(max_length=255)
+    lat = models.FloatField()
+    long = models.FloatField()
+    city = models.CharField(max_length=255)
+
 class Game(models.Model):
     game_title = models.CharField(max_length=255)
     game_team_home = models.CharField(max_length=255, default='')
@@ -23,13 +37,13 @@ class Game(models.Model):
     game_yellowcards = models.CharField(max_length=255, default='[]')
     game_status = models.CharField(max_length=255, default='planned')
     game_type = models.CharField(max_length=255)
-    game_place = models.CharField(max_length=255,default='None')
-    game_poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    game_poll = models.ForeignKey(Poll, on_delete=models.CASCADE, null=True)
     game_season = models.CharField(max_length=255,default='')
+    game_ground = models.ForeignKey(Ground, on_delete=models.CASCADE, null=True)
 
-class Player(models.Model):
-    first_name = models.CharField(max_length=255)
-    second_name = models.CharField(max_length=255)
-    status = models.BooleanField()
+    def ground_name(self):
+        ground = Ground.objects.get(id=self.game_ground.id)
+        ground_name = ground.name
+        return ground_name
 
 

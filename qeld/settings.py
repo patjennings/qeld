@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'import_export',
     'season_manager'
 ]
 
@@ -123,3 +124,4 @@ STATIC_URL = 'public/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+IMPORT_EXPORT_USE_TRANSACTIONS = True # https://django.how/admin/django-export-import-data/

@@ -86,9 +86,9 @@
                 <div class="answer--main flex flex-row items-center p-3">
                     <div class="flex grow items-center gap-x-2">{% if id in players_poll_done %}<img src="{% static 'assets/icons/check_color_sm.svg' %}" class="h-4 w-4" /> {% endif %}{{player}}</div>
                     <div class="actions flex flex-row w-fit items-center grow-0">
-                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=present" class="action--answer present"><img src="{% static 'assets/icons/person_color.svg' %}" class="h-6 w-6" /></a>
-                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=absent" class="action--answer absent"><img src="{% static 'assets/icons/person_off_color.svg' %}" class="h-6 w-6" /></a>
-                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&status=audience" class="action--answer staff"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&auth_valid=False&player_status=present" class="action--answer present"><img src="{% static 'assets/icons/person_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&auth_valid=False&player_status=absent" class="action--answer absent"><img src="{% static 'assets/icons/person_off_color.svg' %}" class="h-6 w-6" /></a>
+                        <a href="/poll_answer/{{game.game_poll_id}}?player={{id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&auth_valid=False&player_status=audience" class="action--answer staff"><img src="{% static 'assets/icons/person_pin_color.svg' %}" class="h-6 w-6" /></a>
                     </div>
                 </div>
                 {% if is_admin %}
@@ -160,6 +160,27 @@
         </div>
     </div>
 </div>
+
+{% if auth_process == 'True' %}
+<div class="w-full h-full bg-black/80 fixed top-0 left-0 z-999 flex content-center">
+    <div class="p-4 bg-white w-fit flex">
+        <p>Auth needed</p>
+        {{player_id}}
+        <form action="/poll_answer/{{game.game_poll_id}}?player={{player_id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&player_status={{player_status}}" method="post">
+            {% csrf_token %}
+            {{form}}
+            <label><input type="text" name="password" id="password" value="{{tags_list_for_edit}}" class="rounded px-2 py-1 border-gray-200 border"></label>
+            <input type="submit" value="Valider" class="button submit"/>
+            <a class="button" href="/game/{{game.id}}">Annuler<a/>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% if auth_valid == 'True' %}
+    <div class="p-4 bg-white w-fit flex">
+        <p>Présence validée</p>
+    </div>
+{% endif %}
 
 {% endblock %}
 

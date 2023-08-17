@@ -36,7 +36,7 @@ class Command(BaseCommand):
         team_away = input('Équipe qui se déplace : ')
         date = input('Date (format yyyy-mm-dd) : ')
         time = input('Heure (format hh:mm:ss) : ')
-        place = input('Lieu (slug): ')
+        ground = input('Stade (l\'id du terrain'): ')
         type = input('Compétition (amical, championnat, coupe) : ')
         season = input('Saison : ')
         title = team_home+' — '+team_away
