@@ -39,7 +39,7 @@ class Game(models.Model):
     game_redcards = models.CharField(max_length=255, default='[]')
     game_yellowcards = models.CharField(max_length=255, default='[]')
     game_status = models.CharField(max_length=255, default='planned', choices=[('planned', 'Planned'), ('delayed', 'Delayed'), ('played', 'Played')])
-    game_type = models.CharField(max_length=255)
+    game_type = models.CharField(max_length=255, default='championnat', choices=[('amical', 'Amical'), ('championnat', 'Championnat'), ('coupe', 'Coupe')])
     game_poll = models.ForeignKey(Poll, on_delete=models.CASCADE, null=True)
     game_season = models.CharField(max_length=255,default='')
     game_ground = models.ForeignKey(Ground, on_delete=models.CASCADE, null=True)
@@ -48,5 +48,3 @@ class Game(models.Model):
         ground = Ground.objects.get(id=self.game_ground.id)
         ground_name = ground.name
         return ground_name
-
-

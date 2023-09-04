@@ -47,7 +47,7 @@ Matchs à venir
         <div class="text-base">{{game.game_title}}<span class="text-base text-slate-400 ml-2">{{game.game_type}}</span></div>
         <div class="datetime flex flex-row text-slate-500 items-center">
             <p class="text-sm mr-2 flex flex-row items-center text-slate-400"><img src="{% static 'assets/icons/clock.svg' %}" class="mr-1 h-4 w-4" /> {{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
-            <p class="text-base flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="ml-4 mr-1 h-6 w-6" />
+            <p class="text-sm flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="ml-4 mr-1 h-6 w-6" />
                 {% for ground in grounds %}
                 {% if ground.id == game.game_ground_id %}
                 {{ground.name}} - {{ground.city}}

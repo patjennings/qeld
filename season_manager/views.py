@@ -3,12 +3,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .forms import AuthForm
 from .models import Game,Poll,Player,Ground
+from season_manager.apps import SeasonManagerConfig
 # from datetime import datetime, date, time
 import datetime
 from var_dump import var_dump
 from ast import literal_eval
 
-__season = '2023-2024'
+__season = SeasonManagerConfig.SEASON_MANAGER_SEASON
 
 # Create your views here.
 def home(request):
@@ -18,7 +19,7 @@ def home(request):
         is_admin = False
     template = loader.get_template('home.html')
     context = {
-        'title': 'This is les Piliers',
+        'title': SeasonManagerConfig.SEASON_MANAGER_HEADER,
         'is_admin': is_admin
     }
 
@@ -34,7 +35,6 @@ def games(request):
     print(is_admin)
     games = Game.objects.all().values()
     grounds = Ground.objects.all().values()
-    print(__season)
 
     games_list = []
     present_for_game = {}
@@ -47,10 +47,21 @@ def games(request):
 
     sorted_games_list = sorted(games_list, key=lambda item:item['game_date'])
 
+    # print(len(sorted_games_list))
+    # noter qu'on ne peut pas retirer un élément d'une liste comme j'ai fait après, ie. au sein d'une loop.
+    # python perd l'index dans le tableau, et tous les games passés ne sont pas supprimés
+    sorted_games_list = [g for g in sorted_games_list if not is_game_past(g['game_date'])]
+
     # comparer maintenant avec le match, et retirer ce qui est passé
-    for g in sorted_games_list:
-        if is_game_past(g['game_date']):
-            sorted_games_list.remove(g)
+    # for g in sorted_games_list:
+        # if is_game_past(g['game_date']):
+            # remove_list.append(g)
+
+    print(len(sorted_games_list))
+    # print(len(sorted_games_list))
+    # for game in sorted_games_list:
+        # print(game['game_title']+" / past ? "+str(is_game_past(game['game_date'])))
+
 
     for game in games:
         poll = Poll.objects.get(id=game['game_poll_id'])
@@ -335,7 +346,6 @@ def stats(request):
     strikers = {}
     passers = {}
 
-
     games_amical = []
     games_championnat = []
     games_coupe = []
@@ -361,14 +371,12 @@ def stats(request):
     stats['ratio_all_against'] = 0
     stats['ratio_competition_against'] = 0
 
-    print(stats)
-
     for player in players:
         strikers[player['id']] = {'presence': 0, 'goals': 0}
         passers[player['id']] = {'presence': 0, 'assists': 0}
 
     for game in games:
-        if game['game_season'] == current_season:
+        if game['game_season'] == current_season and game['game_type'] != 'amical' :
             for goals in get_list_from_str(game['game_goals']):
                 strikers[goals]['goals'] += 1
             for assists in get_list_from_str(game['game_assists']):
@@ -405,6 +413,7 @@ def stats(request):
     stats['total_all_goals_against'] = stats['amical_goals_against'] + stats['championnat_goals_against'] + stats['coupe_goals_against']
     stats['total_competition_games'] = stats['games_championnat_total'] + stats['games_coupe_total']
     stats['total_all_games'] = stats['games_amical_total'] + stats['games_championnat_total'] + stats['games_coupe_total']
+
     if stats['total_all_games'] > 0:
         stats['ratio_all_for'] = "{:.2f}".format(stats['total_all_goals_for']/stats['total_all_games'])
         stats['ratio_all_against'] = "{:.2f}".format(stats['total_all_goals_against']/stats['total_all_games'])
@@ -474,3 +483,4 @@ def get_seasons_from_games(games):
     # sorted_seasons_list = sorted(seasons_list.items(), reverse=True)
     seasons_list.sort(reverse=True)
     return seasons_list
+

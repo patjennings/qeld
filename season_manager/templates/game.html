@@ -174,7 +174,7 @@
         <form action="/poll_answer/{{game.game_poll_id}}?player={{player_id}}&poll={{game.game_poll_id}}&game={{game.id}}&auth_process=True&player_status={{player_status}}" method="post" class="flex flex-col">
             {% csrf_token %}
             {{form}}
-            <label><input type="text" name="password" id="password" value="{{tags_list_for_edit}}" class="rounded px-2 py-1 mb-4 border-gray-200 border w-full"></label>
+            <label><input type="text" name="password" id="password" value="{{tags_list_for_edit}}" class="rounded px-2 py-1 mb-4 border-gray-200 border w-full" autofocus></label>
             <div class="flex flex-row">
                 <input type="submit" value="Valider" class="button submit w-fit"/>
                 <a class="button" href="/game/{{game.id}}">Annuler<a/>

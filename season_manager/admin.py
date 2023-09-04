@@ -43,3 +43,5 @@ class PlayerAdmin(admin.ModelAdmin):
 @admin.register(Ground)
 class GroundAdmin(admin.ModelAdmin):
     list_display = ['name', 'city', 'id']
+
+
