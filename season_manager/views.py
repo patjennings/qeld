@@ -92,6 +92,7 @@ def game(request, id):
     player_id = request.GET.get('player')
     player_status = request.GET.get('player_status')
 
+    admin_href = '/admin/season_manager/game/'+str(id)+'/change/'
 
     if check_user(request):
         is_admin = True
@@ -150,14 +151,9 @@ def game(request, id):
         ground.lat-0.008,
         ground.long+0.02,
         ground.lat+0.008
-]
-    ground_location = [ground.lat, ground.long]
-    # ground_location = 'toto'
-    print(ground_location)
-    print(ground_bbox)
+    ]
 
-    # print(players_list)
-    # print(player_id)
+    ground_location = [ground.lat, ground.long]
 
     template = loader.get_template('game.html')
 
@@ -184,7 +180,8 @@ def game(request, id):
         'auth_process': auth_process,
         'auth_valid': auth_valid,
         'player_id': player_id,
-        'player_status': player_status
+        'player_status': player_status,
+        'admin_href': admin_href
     }
 
     return HttpResponse(template.render(context, request))

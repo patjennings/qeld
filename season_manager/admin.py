@@ -2,7 +2,7 @@ from import_export.admin import ImportExportModelAdmin
 from import_export import fields, resources
 from import_export.widgets import ForeignKeyWidget
 from django.contrib import admin
-from .models import Game,Player,Poll,Ground
+from .models import Game,Player,Poll,Ground,Teak
 
 # Register your models here.
 # admin.site.register(Game)
@@ -39,6 +39,11 @@ class GameAdmin(ImportExportModelAdmin):
 class PlayerAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'status', 'id']
     list_filter = ['status']
+
+
+@admin.register(Team)
+class TeamAdmin(ImportExportModelAdmin):
+    list_display = ['name', 'id']
 
 @admin.register(Ground)
 class GroundAdmin(admin.ModelAdmin):

@@ -17,6 +17,13 @@ class Player(models.Model):
         full_name = self.first_name+' '+self.second_name
         return full_name
 
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+    status = models.BooleanField()
+    logo = models.CharField(max_length=255)
+    def __str__(self):
+        return f'{self.name}'
+
 class Ground(models.Model):
     name = models.CharField(max_length=255)
     lat = models.FloatField()
@@ -27,8 +34,10 @@ class Ground(models.Model):
 
 class Game(models.Model):
     game_title = models.CharField(max_length=255)
-    game_team_home = models.CharField(max_length=255, default='')
-    game_team_away = models.CharField(max_length=255, default='')
+    game_team_home = models.ForeignKey(Team, on_delete=models.PROTECT, null=True, related_name='home')
+    game_team_away = models.ForeignKey(Team, on_delete=models.PROTECT, null=True, related_name='away')
+    # game_team_home = models.CharField(max_length=255, default='')
+    # game_team_away = models.CharField(max_length=255, default='')
     game_date = models.DateField(default=date.today)
     game_time = models.CharField(max_length=255, default='10:00')
     game_score = models.CharField(max_length=255, default='0-0')
@@ -48,3 +57,4 @@ class Game(models.Model):
         ground = Ground.objects.get(id=self.game_ground.id)
         ground_name = ground.name
         return ground_name
+

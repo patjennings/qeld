@@ -12,6 +12,7 @@ scp -rp ~/Documents/dev/qeld/season_manager/static/style.css debian@51.210.101.1
 scp -rp ~/Documents/dev/qeld/season_manager/static/tailwind.css debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/static
 scp -rp ~/Documents/dev/qeld/season_manager/management/* debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/management
 scp -rp ~/Documents/dev/qeld/season_manager/templates/* debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/templates
+scp -rp ~/Documents/dev/qeld/season_manager/migrations/* debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/migrations
 scp -rp ~/Documents/dev/qeld/season_manager/models.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 scp -rp ~/Documents/dev/qeld/season_manager/admin.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 scp -rp ~/Documents/dev/qeld/season_manager/apps.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
@@ -19,5 +20,5 @@ scp -rp ~/Documents/dev/qeld/season_manager/urls.py debian@51.210.101.191:/var/w
 scp -rp ~/Documents/dev/qeld/season_manager/views.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 scp -rp ~/Documents/dev/qeld/season_manager/forms.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/season_manager/
 # scp -rp ~/Documents/dev/qeld/qeld/settings.py debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/qeld # ça, ça écrase la config du serveur, et c'est méga rrelouuu ! Bien penser à commenter avant de pousser
-# scp -rp ~/Documents/dev/qeld/db.sqlite3 debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/
+scp -rp ~/Documents/dev/qeld/db.sqlite3 debian@51.210.101.191:/var/www/piliers-kernilis.fr/qeld/
 

@@ -9,12 +9,19 @@
 <a class="flex flex-row gap-x-2 mb-4" href="/games"><img src="{% static 'assets/icons/arrow_back_dark.svg' %}" class="mr-1 h-6 w-6" />Retour</a>
 <div class="game flex flex-col ">
     <div class="infos rounded-md bg-slate-800 text-white p-6 mb-4">
+
+        {% if is_admin %}
+        <div class="edit justify-center flex flex-col tablet:flex-row mb-4">
+            <a class="text-base! flex flex-row" href="{{admin_href}}"><img src="{% static 'assets/icons/mode_edit_white.svg' %}" class="mr-1 h-6 w-6" /> Éditer le match</a>
+        </div>
+        {% endif %}
         <div class="datetime justify-center flex flex-col tablet:flex-row mb-4">
             <p class="text-base mr-2 flex flex-row text-slate-400"><img src="{% static 'assets/icons/clock.svg' %}" class="mr-1 h-6 w-6" /> {{game.game_date|date:"l d F Y"}} - {{game.game_time}}</p>
             <p class="text-base flex flex-row text-slate-400"><img src="{% static 'assets/icons/location.svg' %}" class="mr-1 h-6 w-6" />{{game.game_ground.name}}</p>
         </div>
         <div class="title mb-4 flex flex-row items-center">
-            <div class="team-home text-xl tablet:text-2xl text-right grow">{{game.game_team_home}}</div>
+            <div class="team-home text-xl tablet:text-2xl text-right grow">{{game.game_team_home.name}}</div>
+            <div class="logo-home w-16 h-16 ml-2"><img src="/public/assets/teams/{{game.game_team_home.logo}}"/> </div>
             {% if status == 'played' %}
             <div class="score mx-4 text-3xl tablet:text-5xl w-fit flex-none">{{game.game_score}}</div>
             {% elif status == 'planned' %}
@@ -23,7 +30,8 @@
             <div class="tag bg-amber-700 w-fit flex-none mx-4">Reporté</div>
             {% endif %}
 
-            <div class="team-away text-xl tablet:text-2xl text-left grow">{{game.game_team_away}}</div>
+            <div class="logo-home w-16 h-16 mr-2"><img src="/public/assets/teams/{{game.game_team_away.logo}}"/> </div>
+            <div class="team-away text-xl tablet:text-2xl text-left grow">{{game.game_team_away.name}}</div>
         </div>
         <div class="status flex flex-row justify-center mb-4">
             {% if status == 'played' %}
